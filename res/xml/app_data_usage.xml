@@ -32,6 +32,11 @@
         android:key="app_data_usage_summary"
         settings:controller="com.android.settings.datausage.AppDataUsageSummaryController"/>
 
+    <PreferenceCategory
+        android:key="tethering_usage_details"
+        android:title="@string/data_usage_tethering_details_title"
+        settings:controller="com.android.settings.datausage.TetheringDataUsageDetailsController" />
+
     <com.android.settingslib.widget.UntitledPreferenceCategory
         android:key="app_data_usage_settings_category">
 

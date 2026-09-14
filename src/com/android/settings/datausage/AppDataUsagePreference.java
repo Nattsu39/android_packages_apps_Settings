@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import androidx.preference.PreferenceViewHolder;
 
 import com.android.settings.R;
+import com.android.settings.datausage.lib.AppDataUsageRepository;
 import com.android.settings.datausage.lib.DataUsageFormatter;
 import com.android.settingslib.AppItem;
 import com.android.settingslib.net.UidDetail;
@@ -43,6 +44,17 @@ public class AppDataUsagePreference extends AppPreference {
         setKey("app_data_usage_" + item.key);
         mItem = item;
         mPercent = percent;
+
+        if (AppDataUsageRepository.isUncategorized(item)) {
+            // This is a synthetic, informational row. It represents bytes reported by the
+            // network stats service that could not be mapped to a visible application.
+            setTitle(R.string.data_usage_uncategorized);
+            setSummary(context.getString(R.string.data_usage_uncategorized_summary,
+                    new DataUsageFormatter(context).formatDataUsage(item.total)));
+            setSelectable(false);
+            mDetail = null;
+            return;
+        }
 
         if (item.restricted && item.total <= 0) {
             setSummary(com.android.settings.R.string.data_usage_app_restricted);

@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.settings.datausage.lib.NetworkCycleBucketRepository
 import com.android.settings.datausage.lib.NetworkStatsRepository
 import com.android.settings.datausage.lib.NetworkStatsRepository.Companion.Bucket
+import com.android.settings.datausage.lib.NetworkStatsRepository.Companion.aggregate
 import com.android.settings.datausage.lib.NetworkStatsRepository.Companion.filterTime
 import com.android.settings.datausage.lib.NetworkUsageData
 import kotlinx.coroutines.Dispatchers
@@ -56,16 +57,22 @@ class DataUsageListViewModel(application: Application) : AndroidViewModel(applic
     val selectedCycleFlow = MutableStateFlow<NetworkUsageData?>(null)
 
     private val selectedBucketsFlow =
-        combine(selectedCycleFlow.filterNotNull(), bucketsFlow) { selectedCycle, buckets ->
+        combine(
+            templateFlow.filterNotNull(),
+            selectedCycleFlow.filterNotNull(),
+            bucketsFlow,
+        ) { template, selectedCycle, buckets ->
+            val selectedBuckets = buckets.filterTime(selectedCycle.startTime, selectedCycle.endTime)
+            val bucketUsage = selectedBuckets.aggregate()?.usage ?: selectedCycle.usage
+            val summaryUsage = NetworkStatsRepository(getApplication(), template)
+                .querySummaryForDevice(selectedCycle.startTime, selectedCycle.endTime)
             SelectedBuckets(
-                selectedCycle = selectedCycle,
-                buckets = buckets.filterTime(selectedCycle.startTime, selectedCycle.endTime),
+                selectedCycle = selectedCycle.copy(usage = maxOf(summaryUsage, bucketUsage)),
+                buckets = selectedBuckets,
             )
         }.flowOn(Dispatchers.Default)
 
-    val chartDataFlow =
-        combine(templateFlow.filterNotNull(), selectedBucketsFlow) { template, selectedBuckets ->
-            NetworkCycleBucketRepository(application, template, selectedBuckets.buckets)
-                .queryChartData(selectedBuckets.selectedCycle)
-        }.flowOn(Dispatchers.Default)
+    val selectedUsageDataFlow =
+        selectedBucketsFlow.map { it.selectedCycle }.flowOn(Dispatchers.Default)
+
 }

@@ -73,28 +73,52 @@ public class ChartDataUsagePreference extends Preference implements GroupSection
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        final UsageView chart = holder.itemView.requireViewById(R.id.data_usage);
-        final int top = getTop();
-        chart.clearPaths();
-        chart.configureGraph(toInt(mEnd - mStart), top);
+        final DataUsagePieChartView chart = holder.itemView.requireViewById(R.id.data_usage);
+        chart.setSubtitle(Utils.formatDateRange(getContext(), mStart, mEnd));
         if (mNetworkCycleChartData != null) {
-            calcPoints(chart, mNetworkCycleChartData.getDailyUsage());
+            chart.setCenterText(
+                    new DataUsageFormatter(getContext())
+                            .formatDataUsage(getDisplayedTotalUsage()));
+            chart.setSlices(buildPieSlices(mNetworkCycleChartData.getDailyUsage()));
             setupContentDescription(chart, mNetworkCycleChartData.getDailyUsage());
+        } else {
+            chart.setCenterText(new DataUsageFormatter(getContext()).formatDataUsage(0L));
+            chart.setSlices(null);
         }
-        chart.setBottomLabels(new CharSequence[] {
-                Utils.formatDateRange(getContext(), mStart, mStart),
-                Utils.formatDateRange(getContext(), mEnd, mEnd),
-        });
-
-        bindNetworkPolicy(chart, mPolicy, top);
     }
 
     public int getTop() {
         final long totalData =
-                mNetworkCycleChartData != null ? mNetworkCycleChartData.getTotal().getUsage() : 0;
+                mNetworkCycleChartData != null ? getDisplayedTotalUsage() : 0;
         final long policyMax =
             mPolicy != null ? Math.max(mPolicy.limitBytes, mPolicy.warningBytes) : 0;
         return (int) (Math.max(totalData, policyMax) / RESOLUTION);
+    }
+
+    private long getDisplayedTotalUsage() {
+        if (mNetworkCycleChartData == null) {
+            return 0L;
+        }
+        final long dailyTotal = mNetworkCycleChartData.getDailyUsage().stream()
+                .mapToLong(NetworkUsageData::getUsage)
+                .sum();
+        return dailyTotal > 0L ? dailyTotal : mNetworkCycleChartData.getTotal().getUsage();
+    }
+
+    @VisibleForTesting
+    List<DataUsagePieChartView.Slice> buildPieSlices(
+            @NonNull List<NetworkUsageData> usageSummary) {
+        final List<DataUsagePieChartView.Slice> slices = new ArrayList<>();
+        final long now = System.currentTimeMillis();
+        for (NetworkUsageData data : usageSummary) {
+            if (data.getStartTime() > now || data.getUsage() <= 0L) {
+                continue;
+            }
+            slices.add(new DataUsagePieChartView.Slice(
+                    Utils.formatDateRange(getContext(), data.getStartTime(), data.getEndTime()),
+                    data.getUsage()));
+        }
+        return slices;
     }
 
     @VisibleForTesting
@@ -123,19 +147,25 @@ public class ChartDataUsagePreference extends Preference implements GroupSection
     }
 
     private void setupContentDescription(
-            UsageView chart, @NonNull List<NetworkUsageData> usageSummary) {
+            DataUsagePieChartView chart, @NonNull List<NetworkUsageData> usageSummary) {
         final Context context = getContext();
         final StringBuilder contentDescription = new StringBuilder();
         final int flags = DateUtils.FORMAT_SHOW_DATE;
+        final long totalUsage = usageSummary.stream().mapToLong(NetworkUsageData::getUsage).sum();
+        final String totalUsageText = new DataUsageFormatter(context).formatDataUsage(totalUsage);
 
         // Setup a brief content description.
         final String startDate = DateUtils.formatDateTime(context, mStart, flags);
         final String endDate = DateUtils.formatDateTime(context, mEnd, flags);
         final String briefContentDescription = mResources
-                .getString(R.string.data_usage_chart_brief_content_description, startDate, endDate);
+                .getString(
+                        R.string.data_usage_pie_chart_brief_content_description,
+                        startDate,
+                        endDate,
+                        totalUsageText);
         contentDescription.append(briefContentDescription);
 
-        if (usageSummary.isEmpty()) {
+        if (totalUsage <= 0L) {
             final String noDataContentDescription = mResources
                     .getString(R.string.data_usage_chart_no_data_content_description);
             contentDescription.append(noDataContentDescription);

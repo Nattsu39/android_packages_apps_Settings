@@ -25,6 +25,15 @@ import com.android.settingslib.spa.framework.util.asyncMap
 
 interface IAppDataUsageDetailsRepository {
     suspend fun queryDetailsForCycles(): List<NetworkUsageDetailsData>
+
+    suspend fun queryDetailsForRange(range: Range<Long>): NetworkUsageDetailsData =
+        queryDetailsForCycles().firstOrNull { it.range == range }
+            ?: NetworkUsageDetailsData(
+                range = range,
+                totalUsage = 0,
+                foregroundUsage = 0,
+                backgroundUsage = 0,
+            )
 }
 
 class AppDataUsageDetailsRepository @JvmOverloads constructor(
@@ -40,7 +49,10 @@ class AppDataUsageDetailsRepository @JvmOverloads constructor(
     private val withSdkSandboxUids = withSdkSandboxUids(uids)
 
     override suspend fun queryDetailsForCycles(): List<NetworkUsageDetailsData> =
-        getCycles().asyncMap { queryDetails(it) }.filter { it.totalUsage > 0 }
+        getCycles().asyncMap { queryDetails(it) }
+
+    override suspend fun queryDetailsForRange(range: Range<Long>): NetworkUsageDetailsData =
+        queryDetails(range)
 
     private fun getCycles(): List<Range<Long>> =
         cycles?.zipWithNext { endTime, startTime -> Range(startTime, endTime) }

@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.preference.PreferenceViewHolder;
 
@@ -195,12 +194,8 @@ public class ChartDataUsagePreferenceTest {
 
     @Test
     public void notifyChange_nonEmptyDataUsage_shouldHaveSingleContentDescription() {
-        final UsageView chart = (UsageView) mHolder.findViewById(R.id.data_usage);
-        final TextView labelTop = (TextView) mHolder.findViewById(R.id.label_top);
-        final TextView labelMiddle = (TextView) mHolder.findViewById(R.id.label_middle);
-        final TextView labelBottom = (TextView) mHolder.findViewById(R.id.label_bottom);
-        final TextView labelStart = (TextView) mHolder.findViewById(R.id.label_start);
-        final TextView labelEnd = (TextView) mHolder.findViewById(R.id.label_end);
+        final DataUsagePieChartView chart =
+                (DataUsagePieChartView) mHolder.findViewById(R.id.data_usage);
         createTestNetworkData();
         mPreference.setTime(
                 mNetworkCycleChartData.getTotal().getStartTime(),
@@ -210,11 +205,6 @@ public class ChartDataUsagePreferenceTest {
         mPreference.onBindViewHolder(mHolder);
 
         assertThat(chart.getContentDescription()).isNotNull();
-        assertThat(labelTop.getContentDescription()).isNull();
-        assertThat(labelMiddle.getContentDescription()).isNull();
-        assertThat(labelBottom.getContentDescription()).isNull();
-        assertThat(labelStart.getContentDescription()).isNull();
-        assertThat(labelEnd.getContentDescription()).isNull();
     }
 
     @Test

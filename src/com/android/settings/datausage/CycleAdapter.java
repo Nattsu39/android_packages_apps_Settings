@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import com.android.settings.Utils;
 import com.android.settingslib.widget.SettingsSpinnerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CycleAdapter extends SettingsSpinnerAdapter<CycleAdapter.CycleItem> {
@@ -51,11 +52,17 @@ public class CycleAdapter extends SettingsSpinnerAdapter<CycleAdapter.CycleItem>
      * the given {@link CycleItem}.
      */
     public int findNearestPosition(CycleItem target) {
-        if (target != null) {
+        if (target != null && target.getType() == CycleItem.TYPE_USAGE) {
             final int count = getCount();
+            for (int i = 0; i < count; i++) {
+                final CycleItem item = getItem(i);
+                if (target.equals(item)) {
+                    return i;
+                }
+            }
             for (int i = count - 1; i >= 0; i--) {
                 final CycleItem item = getItem(i);
-                if (item.compareTo(target) >= 0) {
+                if (item.getType() == CycleItem.TYPE_USAGE && item.compareTo(target) >= 0) {
                     return i;
                 }
             }
@@ -78,14 +85,25 @@ public class CycleAdapter extends SettingsSpinnerAdapter<CycleAdapter.CycleItem>
      * updating the inspection range on chartData.
      */
     public void updateCycleList(List<Range<Long>> cycleData) {
+        final Context context = getContext();
+        final List<CycleItem> cycleItems = new ArrayList<>();
+        for (Range<Long> cycle : cycleData) {
+            cycleItems.add(new CycleItem(context, cycle.getLower(), cycle.getUpper()));
+        }
+        updateCycleItems(cycleItems);
+    }
+
+    /**
+     * Rebuild list with already formatted cycle items.
+     */
+    public void updateCycleItems(List<CycleItem> cycleItems) {
         // stash away currently selected cycle to try restoring below
         final CycleAdapter.CycleItem previousItem = (CycleAdapter.CycleItem)
                 mSpinner.getSelectedItem();
         clear();
 
-        final Context context = getContext();
-        for (Range<Long> cycle : cycleData) {
-            add(new CycleAdapter.CycleItem(context, cycle.getLower(), cycle.getUpper()));
+        for (CycleItem cycleItem : cycleItems) {
+            add(cycleItem);
         }
 
         // force pick the current cycle (first item)
@@ -99,14 +117,28 @@ public class CycleAdapter extends SettingsSpinnerAdapter<CycleAdapter.CycleItem>
      * List item that reflects a specific data usage cycle.
      */
     public static class CycleItem implements Comparable<CycleItem> {
+        public static final int TYPE_USAGE = 0;
+        public static final int TYPE_DATE_PICKER = 1;
+        public static final int TYPE_RANGE_PICKER = 2;
+
         public CharSequence label;
         public long start;
         public long end;
+        private final int mType;
 
         public CycleItem(Context context, long start, long end) {
-            this.label = Utils.formatDateRange(context, start, end);
+            this(Utils.formatDateRange(context, start, end), start, end, TYPE_USAGE);
+        }
+
+        public CycleItem(CharSequence label, long start, long end, int type) {
+            this.label = label;
             this.start = start;
             this.end = end;
+            mType = type;
+        }
+
+        public int getType() {
+            return mType;
         }
 
         @Override
@@ -118,7 +150,7 @@ public class CycleAdapter extends SettingsSpinnerAdapter<CycleAdapter.CycleItem>
         public boolean equals(Object o) {
             if (o instanceof CycleItem) {
                 final CycleItem another = (CycleItem) o;
-                return start == another.start && end == another.end;
+                return start == another.start && end == another.end && mType == another.mType;
             }
             return false;
         }

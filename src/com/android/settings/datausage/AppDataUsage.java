@@ -27,6 +27,7 @@ import static com.android.settings.spa.app.appinfo.AppInfoSettingsProvider.start
 import android.Manifest;
 import android.app.Activity;
 import android.app.settings.SettingsEnums;
+import android.app.usage.NetworkStats;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -78,6 +79,7 @@ public class AppDataUsage extends DataUsageBaseFragment implements OnPreferenceC
     static final String ARG_NETWORK_TEMPLATE = "network_template";
     static final String ARG_NETWORK_CYCLES = "network_cycles";
     static final String ARG_SELECTED_CYCLE = "selected_cycle";
+    static final String ARG_SELECTED_CYCLE_START = "selected_cycle_start";
 
     private static final String KEY_RESTRICT_ALL = "restrict_all";
     private static final String KEY_RESTRICT_BACKGROUND = "restrict_background";
@@ -108,7 +110,10 @@ public class AppDataUsage extends DataUsageBaseFragment implements OnPreferenceC
     private Context mContext;
     private ArrayList<Long> mCycles;
     private long mSelectedCycle;
+    private long mSelectedCycleStart;
+    private boolean mHasSelectedCycleStart;
     private boolean mIsLoading;
+    private TetheringDataUsageDetailsController mTetheringDataUsageDetailsController;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -123,6 +128,8 @@ public class AppDataUsage extends DataUsageBaseFragment implements OnPreferenceC
         mCycles = (args != null) ? (ArrayList) args.getSerializable(ARG_NETWORK_CYCLES)
             : null;
         mSelectedCycle = (args != null) ? args.getLong(ARG_SELECTED_CYCLE) : 0L;
+        mHasSelectedCycleStart = args != null && args.containsKey(ARG_SELECTED_CYCLE_START);
+        mSelectedCycleStart = mHasSelectedCycleStart ? args.getLong(ARG_SELECTED_CYCLE_START) : 0L;
 
         if (mTemplate == null) {
             mTemplate = NetworkTemplates.INSTANCE.getDefaultTemplate(mContext);
@@ -145,6 +152,12 @@ public class AppDataUsage extends DataUsageBaseFragment implements OnPreferenceC
             for (int i = 0; i < mAppItem.uids.size(); i++) {
                 addUid(mAppItem.uids.keyAt(i));
             }
+        }
+
+        if (isTetheringItem()) {
+            mTetheringDataUsageDetailsController =
+                    use(TetheringDataUsageDetailsController.class);
+            mTetheringDataUsageDetailsController.initForTethering(mTemplate);
         }
 
         final List<Integer> uidList = getAppUidList(mAppItem.uids);
@@ -295,16 +308,27 @@ public class AppDataUsage extends DataUsageBaseFragment implements OnPreferenceC
     void initCycle(List<Integer> uidList) {
         var cycleController = use(AppDataUsageCycleController.class);
         var summaryController = use(AppDataUsageSummaryController.class);
+        summaryController.setShowStateBreakdown(!isTetheringItem());
         var repository = new AppDataUsageDetailsRepository(mContext, mTemplate, mCycles, uidList);
         cycleController.init(repository, data -> {
             mIsLoading = false;
             summaryController.update(data);
+            if (mTetheringDataUsageDetailsController != null) {
+                mTetheringDataUsageDetailsController.update(data);
+            }
             return Unit.INSTANCE;
         });
         if (mCycles != null) {
             Log.d(TAG, "setInitialCycles: " + mCycles + " " + mSelectedCycle);
             cycleController.setInitialCycles(mCycles, mSelectedCycle);
         }
+        if (mHasSelectedCycleStart) {
+            cycleController.setInitialSelectedRange(mSelectedCycleStart, mSelectedCycle);
+        }
+    }
+
+    private boolean isTetheringItem() {
+        return mAppItem != null && mAppItem.key == NetworkStats.Bucket.UID_TETHERING;
     }
 
     /**

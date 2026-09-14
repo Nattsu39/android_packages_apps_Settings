@@ -60,6 +60,12 @@ public class SpinnerPreference extends Preference implements CycleAdapter.Spinne
 
     @Override
     public void setSelection(int position) {
+        if (mAdapter == null || position < 0 || position >= mAdapter.getCount()) {
+            mPosition = -1;
+            mCurrentObject = null;
+            notifyChanged();
+            return;
+        }
         mPosition = position;
         mCurrentObject = mAdapter.getItem(mPosition);
         notifyChanged();
@@ -72,7 +78,9 @@ public class SpinnerPreference extends Preference implements CycleAdapter.Spinne
         mItemView.setVisibility(mItemViewVisible ? View.VISIBLE : View.INVISIBLE);
         Spinner spinner = (Spinner) holder.findViewById(R.id.cycles_spinner);
         spinner.setAdapter(mAdapter);
-        spinner.setSelection(mPosition);
+        if (mAdapter != null && mPosition >= 0 && mPosition < mAdapter.getCount()) {
+            spinner.setSelection(mPosition);
+        }
         spinner.setOnItemSelectedListener(mOnSelectedListener);
     }
 
@@ -96,6 +104,11 @@ public class SpinnerPreference extends Preference implements CycleAdapter.Spinne
                 @Override
                 public void onItemSelected(
                         AdapterView<?> parent, View view, int position, long id) {
+                    if (mAdapter == null || position < 0 || position >= mAdapter.getCount()) {
+                        mPosition = -1;
+                        mCurrentObject = null;
+                        return;
+                    }
                     mPosition = position;
                     mCurrentObject = mAdapter.getItem(position);
                     if (mListener != null) {

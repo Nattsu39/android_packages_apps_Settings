@@ -17,25 +17,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        android:key="usage_amount"
-        android:title="@string/summary_placeholder">
+    <com.android.settingslib.widget.UntitledPreferenceCategory
+        android:key="usage_amount_category">
 
-        <com.android.settings.datausage.ChartDataUsagePreference
-            android:key="chart_data"
-            settings:controller="com.android.settings.datausage.ChartDataUsagePreferenceController"
-            />
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="usage_amount"
+            android:layout="@layout/data_usage_selected_usage_preference"
+            android:selectable="false"/>
 
         <com.android.settingslib.widget.LayoutPreference
             android:key="warning"
             android:layout="@layout/data_usage_warning_preference"
             android:selectable="false"/>
 
-    </PreferenceCategory>
+    </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <PreferenceCategory
         android:key="apps_group"
-        android:title="@string/app_list_memory_use"
+        android:title="@string/data_usage_apps_title"
         settings:controller="com.android.settings.datausage.DataUsageListAppsController" />
 
 </PreferenceScreen>

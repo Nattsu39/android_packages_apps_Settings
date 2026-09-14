@@ -7840,6 +7840,10 @@
     <string name="data_usage_summary_title">Data usage</string>
     <!-- Activity title Mobile data & WI-FI summary. [CHAR LIMIT=40] -->
     <string name="data_usage_app_summary_title">Mobile data &amp; Wi\u2011Fi</string>
+    <!-- Category title for the per-app network usage list. [CHAR LIMIT=40] -->
+    <string name="data_usage_apps_title">App data usage</string>
+    <!-- Header label for the data usage amount in the selected period. [CHAR LIMIT=32] -->
+    <string name="data_usage_selected_amount_title">Data used</string>
 
     <!--  Title for menu option to enable global auto-sync of personal account data [CHAR LIMIT=30] -->
     <string name="account_settings_menu_auto_sync_personal">Auto-sync personal data</string>
@@ -7856,6 +7860,8 @@
     <string name="data_usage_today">Today</string>
     <!-- Spinner item for showing data usage from the previous day. [CHAR LIMIT=20] -->
     <string name="data_usage_yesterday">Yesterday</string>
+    <!-- Spinner item for showing data usage from the last 30 days. [CHAR LIMIT=24] -->
+    <string name="data_usage_last_30_days">Last 30 days</string>
     <!-- Spinner item that opens a date picker for data usage. [CHAR LIMIT=24] -->
     <string name="data_usage_select_date">Select date\u2026</string>
     <!-- Spinner item that opens date pickers for a data usage range. [CHAR LIMIT=24] -->
@@ -7870,14 +7876,28 @@
     <string name="data_usage_custom_date_template"><xliff:g id="date" example="Sep 5, 2026">%1$s</xliff:g></string>
     <!-- Spinner item for a picked data usage range. [CHAR LIMIT=60] -->
     <string name="data_usage_custom_range_template"><xliff:g id="range" example="Sep 1 - Sep 5, 2026">%1$s</xliff:g></string>
+    <!-- Category title for tethering usage details. [CHAR LIMIT=40] -->
+    <string name="data_usage_tethering_details_title">Shared connection usage</string>
     <!-- Label for a tethered Wi-Fi client, showing hostname followed by MAC address. [CHAR LIMIT=60] -->
     <string name="data_usage_tethering_client_label"><xliff:g id="hostname" example="Pixel Tablet">%1$s</xliff:g> (<xliff:g id="mac_address" example="12:34:56:78:9a:bc">%2$s</xliff:g>)</string>
     <!-- Label for a tethered client under a specific tethering type. [CHAR LIMIT=80] -->
     <string name="data_usage_tethering_typed_client_label"><xliff:g id="type" example="USB tethering">%1$s</xliff:g> - <xliff:g id="client" example="Pixel Tablet (12:34:56:78:9a:bc)">%2$s</xliff:g></string>
+    <!-- Row title for total tethering usage. [CHAR LIMIT=32] -->
+    <string name="data_usage_tethering_shared_total">Shared total</string>
+    <!-- Row summary for tethered clients when usage is counted in the shared total. [CHAR LIMIT=40] -->
+    <string name="data_usage_tethering_included_in_total">Included in shared total</string>
     <!-- Row summary while exact tethered client usage is being queried. [CHAR LIMIT=30] -->
     <string name="data_usage_tethering_usage_loading">Calculating\u2026</string>
+    <!-- Aggregate usage for tagged tethering clients which are no longer connected. [CHAR LIMIT=40] -->
+    <string name="data_usage_tethering_historical_clients">Previously connected devices</string>
+    <!-- Empty state for the tethered client list. [CHAR LIMIT=40] -->
+    <string name="data_usage_tethering_no_active_clients">No active shared devices</string>
     <!-- Label shown when no applications used data during selected time period. [CHAR LIMIT=48] -->
     <string name="data_usage_empty">No apps used data during this period.</string>
+    <!-- Label for traffic that cannot be associated with a displayed application. [CHAR LIMIT=40] -->
+    <string name="data_usage_uncategorized">Uncategorized traffic</string>
+    <!-- Explanation for traffic that cannot be associated with a displayed application. [CHAR LIMIT=NONE] -->
+    <string name="data_usage_uncategorized_summary"><xliff:g id="amount" example="1 GB">%1$s</xliff:g>: traffic that could not be matched to an app (for example, after an upgrade, from an unavailable app, or from system services).</string>
     <!-- Label for data usage occuring while application in foreground. [CHAR LIMIT=48] -->
     <string name="data_usage_label_foreground">Foreground</string>
     <!-- Label for data usage occuring while application in background. [CHAR LIMIT=48] -->
@@ -11801,6 +11821,8 @@
     <!-- Brief content description for data usage chart [CHAR LIMIT=NONE] -->
     <string name="data_usage_chart_brief_content_description">Graph showing data usage between <xliff:g id="start_date" example="August 19">%1$s</xliff:g> and <xliff:g id="end_date" example="September 16">%2$s</xliff:g>.</string>
 
+    <!-- Brief content description for data usage pie chart [CHAR LIMIT=NONE] -->
+    <string name="data_usage_pie_chart_brief_content_description">Pie chart showing data usage between <xliff:g id="start_date" example="August 19">%1$s</xliff:g> and <xliff:g id="end_date" example="September 16">%2$s</xliff:g>. Total <xliff:g id="total" example="2 GB">%3$s</xliff:g>.</string>
 
     <!-- Content description for data usage chart when data is not available [CHAR LIMIT=NONE] -->
     <string name="data_usage_chart_no_data_content_description">No data in this date range</string>

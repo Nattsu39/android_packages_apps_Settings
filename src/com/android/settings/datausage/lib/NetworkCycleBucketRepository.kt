@@ -35,7 +35,7 @@ class NetworkCycleBucketRepository(
 ) {
 
     fun loadCycles(): List<NetworkUsageData> =
-        getCycles().map { aggregateUsage(it) }.filter { it.usage > 0 }
+        getCycles().map { aggregateUsage(it) }
 
     private fun getCycles(): List<Range<Long>> =
         networkCycleDataRepository.getPolicy()?.getCycles().orEmpty()

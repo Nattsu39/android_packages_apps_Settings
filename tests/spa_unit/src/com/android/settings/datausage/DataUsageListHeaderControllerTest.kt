@@ -26,6 +26,7 @@ import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.settings.R
+import com.android.settings.datausage.lib.NetworkUsageData
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
@@ -88,5 +89,71 @@ class DataUsageListHeaderControllerTest {
         controller.setConfigButtonVisible(false)
 
         assertThat(configureButton.visibility).isEqualTo(View.GONE)
+    }
+
+    @Test
+    fun updateCycleData_shouldShowUsageCyclesAndRangePickers() = runBlocking {
+        val localHeader =
+            LayoutInflater.from(context).inflate(R.layout.apps_filter_spinner, null, false)
+        val localSpinner = localHeader.requireViewById<Spinner>(R.id.filter_spinner)
+        val lifecycleOwner = TestLifecycleOwner(initialState = Lifecycle.State.CREATED)
+        val cycle = NetworkUsageData(START_TIME, END_TIME, BYTES)
+        val selectedCycles = mutableListOf<NetworkUsageData>()
+
+        DataUsageListHeaderController(
+            header = localHeader,
+            template = mock<NetworkTemplate>(),
+            sourceMetricsCategory = 0,
+            viewLifecycleOwner = lifecycleOwner,
+            cyclesFlow = flowOf(listOf(cycle)),
+            updateSelectedCycle = selectedCycles::add,
+        )
+        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
+        delay(100)
+
+        assertThat(localSpinner.adapter.count).isEqualTo(3)
+        assertThat(localSpinner.adapter.getItem(0).toString())
+            .isEqualTo(cycle.formatDateRange(context))
+        assertThat(localSpinner.adapter.getItem(1).toString())
+            .isEqualTo(context.getString(R.string.data_usage_select_date))
+        assertThat(localSpinner.adapter.getItem(2).toString())
+            .isEqualTo(context.getString(R.string.data_usage_select_range))
+        assertThat(selectedCycles.last()).isEqualTo(cycle)
+    }
+
+    @Test
+    fun updateCycleData_emptyCycles_shouldShowDefaultRangeAndRangePickers() = runBlocking {
+        val localHeader =
+            LayoutInflater.from(context).inflate(R.layout.apps_filter_spinner, null, false)
+        val localSpinner = localHeader.requireViewById<Spinner>(R.id.filter_spinner)
+        val lifecycleOwner = TestLifecycleOwner(initialState = Lifecycle.State.CREATED)
+        val selectedCycles = mutableListOf<NetworkUsageData>()
+
+        DataUsageListHeaderController(
+            header = localHeader,
+            template = mock<NetworkTemplate>(),
+            sourceMetricsCategory = 0,
+            viewLifecycleOwner = lifecycleOwner,
+            cyclesFlow = flowOf(emptyList()),
+            updateSelectedCycle = selectedCycles::add,
+        )
+        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
+        delay(100)
+
+        assertThat(localSpinner.adapter.count).isEqualTo(3)
+        assertThat(localSpinner.adapter.getItem(0).toString())
+            .isEqualTo(context.getString(R.string.data_usage_last_30_days))
+        assertThat(localSpinner.adapter.getItem(1).toString())
+            .isEqualTo(context.getString(R.string.data_usage_select_date))
+        assertThat(localSpinner.adapter.getItem(2).toString())
+            .isEqualTo(context.getString(R.string.data_usage_select_range))
+        assertThat(selectedCycles.last().endTime)
+            .isGreaterThan(selectedCycles.last().startTime)
+    }
+
+    private companion object {
+        const val START_TIME = 1521583200000L
+        const val END_TIME = 1521676800000L
+        const val BYTES = 11L
     }
 }

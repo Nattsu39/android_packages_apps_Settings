@@ -49,7 +49,7 @@ class AppDataUsageCycleControllerTest {
     }
 
     @Test
-    fun onViewCreated_noUsage_hidePreference(): Unit = runBlocking {
+    fun onViewCreated_noUsage_showTimeRangePreference(): Unit = runBlocking {
         val repository = object : IAppDataUsageDetailsRepository {
             override suspend fun queryDetailsForCycles() = emptyList<NetworkUsageDetailsData>()
         }
@@ -59,7 +59,7 @@ class AppDataUsageCycleControllerTest {
         controller.onViewCreated(TestLifecycleOwner())
         delay(100)
 
-        assertThat(preference.isVisible).isFalse()
+        assertThat(preference.isVisible).isTrue()
     }
 
     @Test

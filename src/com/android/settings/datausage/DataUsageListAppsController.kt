@@ -32,6 +32,7 @@ import com.android.settings.R
 import com.android.settings.core.BasePreferenceController
 import com.android.settings.core.SubSettingLauncher
 import com.android.settings.datausage.lib.AppDataUsageRepository
+import com.android.settings.datausage.lib.AppDataUsageRepository.Companion.isUncategorized
 import com.android.settings.datausage.lib.NetworkUsageData
 import com.android.settings.network.telephony.requireSubscriptionManager
 import com.android.settingslib.AppItem
@@ -51,6 +52,8 @@ open class DataUsageListAppsController(context: Context, preferenceKey: String) 
     private lateinit var lifecycleScope: LifecycleCoroutineScope
 
     private var cycleData: List<NetworkUsageData>? = null
+    private var selectedStartTime = 0L
+    private var selectedEndTime = 0L
 
     open fun init(template: NetworkTemplate) {
         this.template = template
@@ -76,40 +79,54 @@ open class DataUsageListAppsController(context: Context, preferenceKey: String) 
         this.cycleData = cycleData
     }
 
-    fun update(subId: Int, startTime: Long, endTime: Long) = lifecycleScope.launch {
-        val apps = withContext(Dispatchers.Default) {
-            val carrierId = if (SubscriptionManager.isValidSubscriptionId(subId)) {
-                mContext.requireSubscriptionManager().getActiveSubscriptionInfo(subId)?.carrierId
-            } else null
-            repository.getAppPercent(carrierId, startTime, endTime).map { (appItem, percent) ->
-                AppDataUsagePreference(mContext, appItem, percent, uidDetailProvider).apply {
-                    setOnPreferenceClickListener {
-                        startAppDataUsage(appItem, endTime)
-                        true
+    fun update(subId: Int, startTime: Long, endTime: Long, totalUsage: Long) =
+        lifecycleScope.launch {
+            selectedStartTime = startTime
+            selectedEndTime = endTime
+            val apps = withContext(Dispatchers.Default) {
+                val carrierId = if (SubscriptionManager.isValidSubscriptionId(subId)) {
+                    mContext.requireSubscriptionManager()
+                        .getActiveSubscriptionInfo(subId)?.carrierId
+                } else null
+                repository.getAppPercent(carrierId, startTime, endTime, totalUsage)
+                    .map { (appItem, percent) ->
+                        AppDataUsagePreference(mContext, appItem, percent, uidDetailProvider).apply {
+                            if (!isUncategorized(appItem)) {
+                                setOnPreferenceClickListener {
+                                    startAppDataUsage(appItem, endTime)
+                                    true
+                                }
+                            }
+                        }
                     }
-                }
+            }
+            preference.removeAll()
+            for (app in apps) {
+                preference.addPreference(app)
             }
         }
-        preference.removeAll()
-        for (app in apps) {
-            preference.addPreference(app)
-        }
-    }
 
     @VisibleForTesting
     fun startAppDataUsage(item: AppItem, endTime: Long) {
-        val cycleData = cycleData ?: return
+        val selectedRange = getSelectedRange(endTime) ?: return
+        val launchCycleData = getLaunchCycleData(selectedRange)
+        val isSelectedRangeInLaunchCycles = launchCycleData.any {
+            it.startTime == selectedRange.startTime && it.endTime == selectedRange.endTime
+        }
         val args = Bundle().apply {
             putParcelable(AppDataUsage.ARG_APP_ITEM, item)
             putParcelable(AppDataUsage.ARG_NETWORK_TEMPLATE, template)
             val cycles = ArrayList<Long>().apply {
-                for (data in cycleData) {
+                for (data in launchCycleData) {
                     if (isEmpty()) add(data.endTime)
                     add(data.startTime)
                 }
             }
             putSerializable(AppDataUsage.ARG_NETWORK_CYCLES, cycles)
-            putLong(AppDataUsage.ARG_SELECTED_CYCLE, endTime)
+            if (!isSelectedRangeInLaunchCycles) {
+                putLong(AppDataUsage.ARG_SELECTED_CYCLE_START, selectedRange.startTime)
+            }
+            putLong(AppDataUsage.ARG_SELECTED_CYCLE, selectedRange.endTime)
         }
         SubSettingLauncher(mContext).apply {
             setDestination(AppDataUsage::class.java.name)
@@ -118,4 +135,14 @@ open class DataUsageListAppsController(context: Context, preferenceKey: String) 
             setSourceMetricsCategory(metricsCategory)
         }.launch()
     }
+
+    private fun getSelectedRange(endTime: Long): NetworkUsageData? {
+        if (selectedStartTime < selectedEndTime) {
+            return NetworkUsageData(selectedStartTime, selectedEndTime, 0L)
+        }
+        return cycleData?.find { it.endTime == endTime }
+    }
+
+    private fun getLaunchCycleData(selectedRange: NetworkUsageData): List<NetworkUsageData> =
+        cycleData ?: listOf(selectedRange)
 }

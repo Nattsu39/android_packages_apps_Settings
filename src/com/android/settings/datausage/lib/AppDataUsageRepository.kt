@@ -43,13 +43,22 @@ class AppDataUsageRepository(
 ) {
     private val networkStatsRepository = NetworkStatsRepository(context, template)
 
-    fun getAppPercent(carrierId: Int?, startTime: Long, endTime: Long): List<Pair<AppItem, Int>> {
+    fun getAppPercent(
+        carrierId: Int?,
+        startTime: Long,
+        endTime: Long,
+        totalUsage: Long,
+    ): List<Pair<AppItem, Int>> {
         val buckets = networkStatsRepository.queryBuckets(startTime, endTime)
-        return getAppPercent(carrierId, buckets)
+        return getAppPercent(carrierId, buckets, totalUsage)
     }
 
     @VisibleForTesting
-    fun getAppPercent(carrierId: Int?, buckets: List<Bucket>): List<Pair<AppItem, Int>> {
+    fun getAppPercent(
+        carrierId: Int?,
+        buckets: List<Bucket>,
+        totalUsage: Long = buckets.sumOf { it.bytes },
+    ): List<Pair<AppItem, Int>> {
         val knownItems = SparseArray<AppItem>()
         val profiles = context.userManager.userProfiles
         val userManager: UserManager = context.getSystemService(Context.USER_SERVICE) as UserManager
@@ -76,7 +85,32 @@ class AppDataUsageRepository(
         }
 
         val filteredItems =
-            filterItems(carrierId, knownItems.valueIterator().asSequence().toList()).sorted()
+            filterItems(carrierId, knownItems.valueIterator().asSequence().toList()).toMutableList()
+
+        // Keep the application list lossless. Device totals can contain historical bytes without
+        // matching UID details after an upgrade. Some UID details also cannot be shown as an app,
+        // such as traffic from a hidden profile or an intentionally hidden carrier package.
+        // Count each source UID only once because managed-profile traffic can appear in both a
+        // profile summary and an app row.
+        val displayedUids = SparseBooleanArray()
+        filteredItems.forEach { item ->
+            for (index in 0 until item.uids.size()) {
+                displayedUids.put(item.uids.keyAt(index), true)
+            }
+        }
+        val displayedAttributedUsage =
+            buckets.filter { displayedUids[it.uid] }.sumOf { it.bytes }
+        val reportedUsage = maxOf(totalUsage, buckets.sumOf { it.bytes })
+        val unclassifiedUsage =
+            (reportedUsage - displayedAttributedUsage).coerceAtLeast(0L)
+        if (unclassifiedUsage > 0L) {
+            filteredItems += AppItem(UNCATEGORIZED_UID).apply {
+                category = AppItem.CATEGORY_APP
+                total = unclassifiedUsage
+            }
+        }
+
+        filteredItems.sort()
         val largest: Long = filteredItems.maxOfOrNull { it.total } ?: 0
         return filteredItems.map { item ->
             val percentTotal = if (largest > 0) (item.total * 100 / largest).toInt() else 0
@@ -195,6 +229,12 @@ class AppDataUsageRepository(
     }
 
     companion object {
+        /** Synthetic key for traffic that cannot be associated with a displayed app. */
+        const val UNCATEGORIZED_UID = Int.MIN_VALUE
+
+        @JvmStatic
+        fun isUncategorized(item: AppItem): Boolean = item.key == UNCATEGORIZED_UID
+
         @JvmStatic
         fun getAppUidList(uids: SparseBooleanArray) =
             uids.keyIterator().asSequence().map { getAppUid(it) }.distinct().toList()

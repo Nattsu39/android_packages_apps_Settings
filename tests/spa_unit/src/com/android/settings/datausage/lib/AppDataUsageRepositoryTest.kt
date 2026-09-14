@@ -122,13 +122,60 @@ class AppDataUsageRepositoryTest {
 
         val appPercentList = repository.getAppPercent(HIDING_CARRIER_ID, buckets)
 
-        assertThat(appPercentList).hasSize(1)
+        assertThat(appPercentList).hasSize(2)
         appPercentList[0].first.apply {
             assertThat(key).isEqualTo(APP_ID_2)
             assertThat(category).isEqualTo(AppItem.CATEGORY_APP)
             assertThat(total).isEqualTo(2)
         }
         assertThat(appPercentList[0].second).isEqualTo(100)
+        appPercentList[1].first.apply {
+            assertThat(key).isEqualTo(AppDataUsageRepository.UNCATEGORIZED_UID)
+            assertThat(total).isEqualTo(1)
+        }
+        assertThat(appPercentList.sumOf { it.first.total }).isEqualTo(3)
+    }
+
+    @Test
+    fun getAppPercent_totalUsageExceedsUidUsage_addsDifferenceAsUncategorized() {
+        val repository =
+            AppDataUsageRepository(
+                context = context,
+                currentUserId = USER_ID,
+                template = Template,
+                getPackageName = { null },
+            )
+        val buckets =
+            listOf(Bucket(uid = APP_ID_1, bytes = 40, startTimeStamp = 0, endTimeStamp = 0))
+
+        val appPercentList = repository.getAppPercent(null, buckets, totalUsage = 100)
+
+        assertThat(appPercentList.map { it.first.total }.sum()).isEqualTo(100)
+        appPercentList.first { AppDataUsageRepository.isUncategorized(it.first) }.first.apply {
+            assertThat(total).isEqualTo(60)
+        }
+    }
+
+    @Test
+    fun getAppPercent_managedProfileRowsOverlap_doesNotAddUncategorized() {
+        mockUserManager.stub {
+            on { userProfiles } doReturn
+                listOf(UserHandle.of(USER_ID), UserHandle.of(MANAGED_USER_ID))
+        }
+        val repository =
+            AppDataUsageRepository(
+                context = context,
+                currentUserId = USER_ID,
+                template = Template,
+                getPackageName = { null },
+            )
+        val buckets =
+            listOf(Bucket(uid = MANAGED_APP_ID, bytes = 7, startTimeStamp = 0, endTimeStamp = 0))
+
+        val appPercentList = repository.getAppPercent(null, buckets)
+
+        assertThat(appPercentList.map { it.first.key })
+            .doesNotContain(AppDataUsageRepository.UNCATEGORIZED_UID)
     }
 
     @Test
@@ -170,8 +217,10 @@ class AppDataUsageRepositoryTest {
 
     private companion object {
         const val USER_ID = 1
+        const val MANAGED_USER_ID = 2
         const val APP_ID_1 = 110001
         const val APP_ID_2 = 110002
+        const val MANAGED_APP_ID = 210001
         const val HIDING_CARRIER_ID = 4
         const val HIDING_PACKAGE_NAME = "hiding.package.name"
 

@@ -31,7 +31,6 @@ import android.widget.TextView
 import androidx.annotation.OpenForTesting
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.viewModels
-import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.Utils
 import com.android.settings.dashboard.DashboardFragment
@@ -60,9 +59,8 @@ open class DataUsageList : DashboardFragment() {
 
     private lateinit var billingCycleRepository: BillingCycleRepository
 
-    private var usageAmount: Preference? = null
+    private var usageAmount: LayoutPreference? = null
     private var dataUsageListAppsController: DataUsageListAppsController? = null
-    private var chartDataUsagePreferenceController: ChartDataUsagePreferenceController? = null
     private var dataUsageListHeaderController: DataUsageListHeaderController? = null
 
     private val viewModel: DataUsageListViewModel by viewModels()
@@ -93,9 +91,8 @@ open class DataUsageList : DashboardFragment() {
         }
         dataUsageListAppsController =
             use(DataUsageListAppsController::class.java).apply { init(template) }
-        chartDataUsagePreferenceController =
-            use(ChartDataUsagePreferenceController::class.java).apply { init(template) }
 
+        updateSelectedUsageAmount(NetworkUsageData.AllZero)
         updateWarning()
     }
 
@@ -104,19 +101,21 @@ open class DataUsageList : DashboardFragment() {
         val preference = findPreference<LayoutPreference>(KEY_WARNING) ?: return
         val textView = preference.findViewById<TextView>(R.id.text) ?: return
         val context = requireContext()
-        if (template.matchRule != NetworkTemplate.MATCH_WIFI) {
-            textView.text = context.getString(R.string.operator_warning)
-        } else if (Utils.isMobileDataCapable(context)) {
-            textView.text = context.getString(R.string.non_carrier_data_usage_warning)
+        val warningText = when {
+            template.matchRule != NetworkTemplate.MATCH_WIFI ->
+                context.getString(R.string.operator_warning)
+            Utils.isMobileDataCapable(context) ->
+                context.getString(R.string.non_carrier_data_usage_warning)
+            else -> null
+        }
+        preference.isVisible = warningText != null
+        if (warningText != null) {
+            textView.text = warningText
         }
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
-
-        billingCycleRepository
-            .isModifiableFlow(subId)
-            .collectLatestWithLifecycle(viewLifecycleOwner, action = ::updatePolicy)
 
         val template = template ?: return
         viewModel.templateFlow.value = template
@@ -129,11 +128,20 @@ open class DataUsageList : DashboardFragment() {
                 viewModel.cyclesFlow,
                 ::updateSelectedCycle,
             )
+        if (template.matchRule == NetworkTemplate.MATCH_MOBILE &&
+            SubscriptionManager.isValidSubscriptionId(subId)
+        ) {
+            billingCycleRepository
+                .isModifiableFlow(subId)
+                .collectLatestWithLifecycle(viewLifecycleOwner, action = ::updatePolicy)
+        } else {
+            updatePolicy(false)
+        }
         viewModel.cyclesFlow.collectLatestWithLifecycle(viewLifecycleOwner) { cycles ->
             dataUsageListAppsController?.updateCycles(cycles)
         }
-        viewModel.chartDataFlow.collectLatestWithLifecycle(viewLifecycleOwner) { chartData ->
-            chartDataUsagePreferenceController?.update(chartData)
+        viewModel.selectedUsageDataFlow.collectLatestWithLifecycle(viewLifecycleOwner) { usageData ->
+            updateSelectedUsageData(usageData)
         }
         finishIfSubscriptionDisabled()
     }
@@ -192,20 +200,28 @@ open class DataUsageList : DashboardFragment() {
         }
     }
 
-    /** Update chart sweeps and cycle list to reflect [NetworkPolicy] for current [template]. */
+    /** Update the billing-cycle configuration button to reflect [NetworkPolicy]. */
     private fun updatePolicy(isModifiable: Boolean) {
         dataUsageListHeaderController?.setConfigButtonVisible(isModifiable)
-        chartDataUsagePreferenceController?.setBillingCycleModifiable(isModifiable)
     }
 
     /** Updates the chart and detail data when initial loaded or selected cycle changed. */
     private fun updateSelectedCycle(usageData: NetworkUsageData) {
         Log.d(TAG, "showing cycle $usageData")
 
-        usageAmount?.title = usageData.getDataUsedString(requireContext())
         viewModel.selectedCycleFlow.value = usageData
+    }
 
+    /** Updates usage summary and applications data usage after selected range is aggregated. */
+    private fun updateSelectedUsageData(usageData: NetworkUsageData) {
+        updateSelectedUsageAmount(usageData)
         updateApps(usageData)
+    }
+
+    private fun updateSelectedUsageAmount(usageData: NetworkUsageData) {
+        usageAmount
+            ?.findViewById<TextView>(R.id.data_usage_amount)
+            ?.text = usageData.getDataUsedString(requireContext())
     }
 
     /** Updates applications data usage. */
@@ -214,6 +230,7 @@ open class DataUsageList : DashboardFragment() {
             subId = subId,
             startTime = usageData.startTime,
             endTime = usageData.endTime,
+            totalUsage = usageData.usage,
         )
     }
 

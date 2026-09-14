@@ -3276,12 +3276,16 @@
     <string name="select_all" msgid="7898929601615536401">"全选"</string>
     <string name="data_usage_summary_title" msgid="394067070764360142">"流量使用情况"</string>
     <string name="data_usage_app_summary_title" msgid="4933742247928064178">"移动数据和 WLAN"</string>
+    <string name="data_usage_apps_title">"应用流量使用量"</string>
+    <string name="data_usage_selected_amount_title">"已用流量"</string>
     <string name="account_settings_menu_auto_sync_personal" msgid="2905595464540145671">"自动同步个人账号数据"</string>
     <string name="account_settings_menu_auto_sync_work" msgid="8561102487795657789">"自动同步工作账号数据"</string>
     <string name="account_settings_menu_auto_sync_private" msgid="2315144351530596228">"自动同步私有数据"</string>
     <string name="data_usage_change_cycle" msgid="4501026427365283899">"更改周期..."</string>
     <string name="data_usage_pick_cycle_day" msgid="3548922497494790123">"每月流量消耗重计日期："</string>
     <string name="data_usage_empty" msgid="5619908658853726866">"没有任何应用在此期间产生过数据流量。"</string>
+    <string name="data_usage_uncategorized">"未分类流量"</string>
+    <string name="data_usage_uncategorized_summary">"%1$s：无法匹配到具体应用的流量（例如升级后遗留的流量、来自不可用应用的流量或系统服务流量）。"</string>
     <string name="data_usage_label_foreground" msgid="8782117644558473624">"前台"</string>
     <string name="data_usage_label_background" msgid="8862781660427421859">"后台"</string>
     <string name="data_usage_app_restricted" msgid="312065316274378518">"受限"</string>
@@ -4682,6 +4686,7 @@
     <string name="data_overusage" msgid="3680477320458707259">"超过 <xliff:g id="ID_1">^1</xliff:g>"</string>
     <string name="data_remaining" msgid="6316251496381922837">"还剩 <xliff:g id="ID_1">^1</xliff:g>"</string>
     <string name="data_usage_chart_brief_content_description" msgid="5548074070258881530">"这张图表显示的是 <xliff:g id="START_DATE">%1$s</xliff:g>到 <xliff:g id="END_DATE">%2$s</xliff:g>之间的数据用量。"</string>
+    <string name="data_usage_pie_chart_brief_content_description">这张饼图显示的是 <xliff:g id="start_date">%1$s</xliff:g>到 <xliff:g id="end_date">%2$s</xliff:g>之间的数据用量，总计 <xliff:g id="total">%3$s</xliff:g>。</string>
     <string name="data_usage_chart_no_data_content_description" msgid="5481968839079467231">"此日期范围内没有任何数据"</string>
     <string name="billing_cycle_days_left" msgid="174337287346866400">"{count,plural, =1{还剩 # 天}other{还剩 # 天}}"</string>
     <string name="billing_cycle_none_left" msgid="1694844019159277504">"已没有剩余时间"</string>
@@ -6096,6 +6101,7 @@
     <string name="wifi_tether_wifi_version_wifi7">Wi-Fi 7</string>
     <string name="data_usage_today">今天</string>
     <string name="data_usage_yesterday">昨天</string>
+    <string name="data_usage_last_30_days">最近 30 天</string>
     <string name="data_usage_select_date">选择日期\u2026</string>
     <string name="data_usage_select_range">选择时间段\u2026</string>
     <string name="data_usage_select_date_title">选择日期</string>
@@ -6103,7 +6109,12 @@
     <string name="data_usage_select_range_end_title">选择结束日期</string>
     <string name="data_usage_custom_date_template"><xliff:g id="date">%1$s</xliff:g></string>
     <string name="data_usage_custom_range_template"><xliff:g id="range">%1$s</xliff:g></string>
+    <string name="data_usage_tethering_details_title">共享连接流量</string>
     <string name="data_usage_tethering_client_label"><xliff:g id="hostname">%1$s</xliff:g>（<xliff:g id="mac_address">%2$s</xliff:g>）</string>
     <string name="data_usage_tethering_typed_client_label"><xliff:g id="type">%1$s</xliff:g> - <xliff:g id="client">%2$s</xliff:g></string>
+    <string name="data_usage_tethering_shared_total">共享总流量</string>
+    <string name="data_usage_tethering_included_in_total">已计入共享总流量</string>
     <string name="data_usage_tethering_usage_loading">正在计算\u2026</string>
+    <string name="data_usage_tethering_historical_clients">历史连接设备</string>
+    <string name="data_usage_tethering_no_active_clients">没有活动的共享设备</string>
 </resources>

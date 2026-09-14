@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 
 import androidx.preference.PreferenceViewHolder;
 
+import com.android.settings.R;
 import com.android.settingslib.AppItem;
 import com.android.settingslib.net.UidDetail;
 import com.android.settingslib.net.UidDetailProvider;
@@ -100,5 +101,20 @@ public class AppDataUsagePreferenceTest {
         mPreference.onBindViewHolder(preferenceViewHolder);
 
         assertThat(progressBar.getContentDescription()).isEqualTo(FIFTY_PERCENT);
+    }
+
+    @Test
+    public void createPref_uncategorized_shouldExplainAndDisableNavigation() {
+        mAppItem = new AppItem(
+                com.android.settings.datausage.lib.AppDataUsageRepository.UNCATEGORIZED_UID);
+        mAppItem.total = 1024;
+
+        mPreference = new AppDataUsagePreference(RuntimeEnvironment.application, mAppItem,
+                50 /* percent */, mUidDetailProvider);
+
+        assertThat(mPreference.getTitle()).isEqualTo(
+                RuntimeEnvironment.application.getString(R.string.data_usage_uncategorized));
+        assertThat(mPreference.getSummary().toString()).contains("could not be matched to an app");
+        assertThat(mPreference.isSelectable()).isFalse();
     }
 }

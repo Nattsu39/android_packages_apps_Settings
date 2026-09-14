@@ -30,9 +30,10 @@ class NetworkStatsRepository(context: Context, private val template: NetworkTemp
         range: Range<Long>,
         uid: Int,
         state: Int = NetworkStats.Bucket.STATE_ALL,
+        tag: Int = NetworkStats.Bucket.TAG_NONE,
     ): NetworkUsageData? = try {
         networkStatsManager.queryDetailsForUidTagState(
-            template, range.lower, range.upper, uid, NetworkStats.Bucket.TAG_NONE, state,
+            template, range.lower, range.upper, uid, tag, state,
         ).convertToBuckets().aggregate()
     } catch (e: Exception) {
         Log.e(TAG, "Exception queryDetailsForUidTagState", e)
@@ -44,6 +45,13 @@ class NetworkStatsRepository(context: Context, private val template: NetworkTemp
             .convertToBuckets()
     } catch (e: Exception) {
         Log.e(TAG, "Exception queryDetailsForDevice", e)
+        emptyList()
+    }
+
+    fun queryTaggedBuckets(startTime: Long, endTime: Long): List<Bucket> = try {
+        networkStatsManager.queryTaggedSummary(template, startTime, endTime).convertToBuckets()
+    } catch (e: Exception) {
+        Log.e(TAG, "Exception queryTaggedSummary", e)
         emptyList()
     }
 
@@ -74,6 +82,9 @@ class NetworkStatsRepository(context: Context, private val template: NetworkTemp
             val state: Int = NetworkStats.Bucket.STATE_ALL,
             val startTimeStamp: Long,
             val endTimeStamp: Long,
+            val tag: Int = NetworkStats.Bucket.TAG_NONE,
+            val rxBytes: Long = bytes,
+            val txBytes: Long = 0L,
         )
 
         fun List<Bucket>.aggregate(): NetworkUsageData? = when {
@@ -100,6 +111,9 @@ class NetworkStatsRepository(context: Context, private val template: NetworkTemp
                         state = bucket.state,
                         startTimeStamp = bucket.startTimeStamp,
                         endTimeStamp = bucket.endTimeStamp,
+                        tag = bucket.tag,
+                        rxBytes = bucket.rxBytes,
+                        txBytes = bucket.txBytes,
                     )
                 }
             }
