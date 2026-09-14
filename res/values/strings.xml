@@ -2922,6 +2922,200 @@
     <string name="wifi_hotspot_maximize_compatibility_single_ap_summary">Helps other devices find this hotspot. Reduces hotspot connection speed.</string>
     <!-- Summary for the toggle to show the maximize compatibility warning message in dual AP device [CHAR LIMIT=NONE]-->
     <string name="wifi_hotspot_maximize_compatibility_dual_ap_summary">Helps other devices find this hotspot. Increases battery usage.</string>
+    <!-- Category title for basic Wi-Fi hotspot identity and security settings. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_network_settings_category">Network settings</string>
+    <!-- Category title for hotspot device management and usage controls. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_devices_usage_category">Devices and usage</string>
+    <!-- Category title for advanced Wi-Fi hotspot radio settings. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_advanced_settings_category">Advanced settings</string>
+    <!-- Title for managing devices connected to Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_title">Connected devices</string>
+    <!-- Summary for managing devices connected to Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_summary">View and block hotspot devices</string>
+    <!-- Title for hotspot client management and persistent usage history. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_devices_usage_title">Hotspot devices and usage</string>
+    <!-- Summary for hotspot client management and persistent usage history. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_devices_usage_summary">Usage history, disconnect and block devices</string>
+    <!-- Summary with recent hotspot sharing usage. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_devices_usage_summary_with_usage"><xliff:g id="usage">%1$s</xliff:g> in the last 24 hours; view devices and usage history</string>
+    <!-- Summary showing the hotspot sharing usage in the last 24 hours. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_last_day_summary"><xliff:g id="usage">%1$s</xliff:g> in the last 24 hours</string>
+    <!-- Title for usage recorded since the current hotspot session started. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_session_usage_title">This hotspot session</string>
+    <!-- Category title for devices currently connected to Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_connected_title">Connected</string>
+    <!-- Category title for devices blocked from Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_blocked_title">Blocked</string>
+    <!-- Summary shown when no devices are currently connected to Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_empty">No connected devices</string>
+    <!-- Summary shown when no devices are blocked from Wi-Fi hotspot. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_blocked_devices_empty">No blocked devices</string>
+    <!-- Category title for devices which previously used tethering. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_history_devices_title">Previously connected devices</string>
+    <!-- Summary shown when there is no persisted tethering device history. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_history_devices_empty">No previously connected devices</string>
+    <!-- Summary shown for a connected Wi-Fi hotspot device. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_connected_summary">Connected</string>
+    <!-- Summary shown for a blocked Wi-Fi hotspot device. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_blocked_summary">Blocked</string>
+    <!-- Summary shown for a historical tethering device. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_history_summary">Previously connected</string>
+    <!-- Summary containing connection type, state and persistent usage for a tethering device. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_usage_summary"><xliff:g id="connection_type">%1$s</xliff:g>, <xliff:g id="state">%2$s</xliff:g>, <xliff:g id="usage">%3$s</xliff:g></string>
+    <!-- Summary for a currently connected tethering client, showing current hotspot session usage. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_connected_usage_summary"><xliff:g id="connection_type">%1$s</xliff:g>, connected, this session <xliff:g id="usage">%2$s</xliff:g></string>
+    <!-- Summary for a historical tethering client with available actions. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_history_actions_summary"><xliff:g id="connection_type">%1$s</xliff:g>, tap to view usage history or block</string>
+    <!-- Label for a Wi-Fi tethering connection type. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_connection_type_wifi">Wi-Fi hotspot</string>
+    <!-- Dialog title for blocking a Wi-Fi hotspot client. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_block_title">Block this device?</string>
+    <!-- Dialog message for blocking a Wi-Fi hotspot client. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_block_message">This device will be disconnected and cannot reconnect until it is unblocked.</string>
+    <!-- Positive button for blocking a Wi-Fi hotspot client. [CHAR LIMIT=30]-->
+    <string name="wifi_tether_client_block">Block</string>
+    <!-- Action to disconnect a Wi-Fi hotspot client without blocking it. [CHAR LIMIT=30] -->
+    <string name="wifi_tether_client_disconnect">Disconnect temporarily</string>
+    <!-- Action to open tethering usage for a client. [CHAR LIMIT=30] -->
+    <string name="wifi_tether_client_usage_history">Usage history</string>
+    <!-- Toast after a Wi-Fi hotspot client was disconnected. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_disconnected">Device disconnected</string>
+    <!-- Toast when a Wi-Fi hotspot client could not be disconnected. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_client_disconnect_failed">Couldn\u2019t disconnect device</string>
+    <!-- Dialog title for unblocking a Wi-Fi hotspot client. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_unblock_title">Unblock this device?</string>
+    <!-- Dialog message for unblocking a Wi-Fi hotspot client. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_client_unblock_message">This device will be able to connect to your hotspot again.</string>
+    <!-- Positive button for unblocking a Wi-Fi hotspot client. [CHAR LIMIT=30]-->
+    <string name="wifi_tether_client_unblock">Unblock</string>
+    <!-- Footer for Wi-Fi hotspot connected devices screen. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_connected_devices_footer">Device names are not available from hotspot clients, so devices are shown by MAC address.</string>
+    <!-- Footer describing hotspot device usage persistence and controls. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_devices_usage_footer">Usage is saved by connection type and device. Disconnecting is temporary; blocking prevents the device from reconnecting.</string>
+    <!-- Title for hotspot sharing usage details. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_title">Hotspot shared usage</string>
+    <!-- Title for one device hotspot sharing usage details. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_device_title">Device usage</string>
+    <!-- Summary showing a selected hotspot client's MAC address. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_device_mac_address">MAC address: <xliff:g id="mac_address" example="12:34:56:78:9a:bc">%1$s</xliff:g></string>
+    <!-- Preference title for selecting the hotspot usage time range. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_time_range">Time range</string>
+    <!-- Category title for hotspot usage summary. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_summary_title">Usage</string>
+    <!-- Category title for hotspot usage by device. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_devices_title">Device statistics</string>
+    <!-- Hotspot usage total label. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_total">Total</string>
+    <!-- Hotspot usage download label. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_download">Download</string>
+    <!-- Hotspot usage upload label. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_upload">Upload</string>
+    <!-- Last 24 hours time range label. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_last_24_hours">Last 24 hours</string>
+    <!-- Current month time range label. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_this_month">This month</string>
+    <!-- Usage row summary with total, download and upload. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_usage_split">Total <xliff:g id="total">%1$s</xliff:g>, upload <xliff:g id="upload">%2$s</xliff:g>, download <xliff:g id="download">%3$s</xliff:g></string>
+    <!-- Label for tethering traffic that cannot be mapped to a device. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_uncategorized">Uncategorized device traffic</string>
+    <!-- Explanation for tethering traffic that cannot be mapped to a device. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_uncategorized_summary"><xliff:g id="amount" example="1 GB">%1$s</xliff:g>: traffic reported by tethering without a stable device identifier.</string>
+    <!-- Empty state for hotspot device usage details. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_no_devices">No tethered device history</string>
+    <!-- Category title for one hotspot device usage. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_device_usage_title">Device usage</string>
+    <!-- Category title for one hotspot device actions. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_details_actions_title">Actions</string>
+    <!-- Title used when a hotspot client did not report a hostname. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_usage_unknown_hostname">Unknown device</string>
+    <!-- Title for maximum number of Wi-Fi hotspot clients. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_max_clients_title">Maximum connections</string>
+    <!-- Automatic maximum number of Wi-Fi hotspot clients. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_max_clients_auto">Automatic</string>
+    <!-- Summary for maximum number of Wi-Fi hotspot clients. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_max_clients_summary"><xliff:g id="count">%1$d</xliff:g> devices</string>
+    <!-- Summary for a feature unavailable on this Wi-Fi hotspot device. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_feature_unavailable">Not supported by this device</string>
+    <!-- Title for Wi-Fi hotspot channel selection. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_channel_title">Hotspot channel</string>
+    <!-- Automatic Wi-Fi hotspot channel. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_channel_auto">Automatic</string>
+    <!-- Summary for a selected Wi-Fi hotspot channel. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_channel_summary"><xliff:g id="band">%1$s</xliff:g> channel <xliff:g id="channel">%2$d</xliff:g></string>
+    <!-- Summary for multiple selected Wi-Fi hotspot channels. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_channel_multiple_summary">Multiple channels</string>
+    <!-- Summary when no Wi-Fi hotspot channels are available. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_channel_unavailable">No channels available for the current configuration</string>
+    <!-- Summary suffix for Wi-Fi hotspot channel supporting 160 MHz bandwidth. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_channel_160mhz_summary"><xliff:g id="channel">%1$s</xliff:g> (160 MHz)</string>
+    <!-- Summary shown for automatic channel selection while 160 MHz mode is enabled. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_channel_160mhz_auto_summary">Automatically select a 5 GHz channel that supports 160 MHz</string>
+    <!-- Summary shown for a fixed channel that supports 160 MHz mode. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_channel_160mhz_supported_summary">Supports 160 MHz mode</string>
+    <!-- Summary shown for a fixed channel that will disable 160 MHz mode if selected. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_channel_160mhz_disable_hint">Selecting this channel will turn off 160 MHz mode</string>
+    <!-- Title for Wi-Fi hotspot 5 GHz 160 MHz mode. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_5g_160mhz_title">5 GHz 160 MHz mode</string>
+    <!-- Summary for Wi-Fi hotspot 5 GHz 160 MHz mode. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_5g_160mhz_summary">Use 160 MHz bandwidth when a supported 5 GHz channel is available</string>
+    <!-- Summary when Wi-Fi hotspot 5 GHz 160 MHz mode is unavailable. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_5g_160mhz_unavailable">No supported 5 GHz 160 MHz channel available</string>
+    <!-- Dialog title shown when leaving 5 GHz 160 MHz mode. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_5g_160mhz_disable_dialog_title">Turn off 160 MHz mode?</string>
+    <!-- Dialog text shown when selecting a channel that cannot use 160 MHz. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_5g_160mhz_disable_dialog_message">The selected channel does not support 160 MHz bandwidth. Switch channels and turn off 160 MHz mode?</string>
+    <!-- Positive button shown when selecting a channel that cannot use 160 MHz. [CHAR LIMIT=30]-->
+    <string name="wifi_tether_5g_160mhz_disable_dialog_positive">Switch</string>
+    <!-- Title for Wi-Fi hotspot runtime/config details. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_title">Hotspot details</string>
+    <!-- Summary for Wi-Fi hotspot runtime/config details. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_summary">SSID, band, bandwidth, mode and country code</string>
+    <!-- Label for Wi-Fi hotspot SSID detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_ssid">SSID</string>
+    <!-- Label for Wi-Fi hotspot BSSID detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_bssid">BSSID</string>
+    <!-- Label for Wi-Fi hotspot TX power detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_txpower">TX power</string>
+    <!-- Label for Wi-Fi hotspot band detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_band">Band</string>
+    <!-- Label for Wi-Fi hotspot channel detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_channel">Channel</string>
+    <!-- Label for Wi-Fi hotspot bandwidth detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_bandwidth">Bandwidth</string>
+    <!-- Label for Wi-Fi hotspot mode detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_mode">Mode</string>
+    <!-- Label for Wi-Fi hotspot country code detail. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_country_code">Country code</string>
+    <!-- Summary for unavailable Wi-Fi hotspot detail values. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_unavailable">Unavailable</string>
+    <!-- Summary for automatic Wi-Fi hotspot detail values. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_hotspot_details_auto">Automatic</string>
+    <!-- Title for Wi-Fi hotspot shared data limit. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_data_limit_title">Per-session shared data limit</string>
+    <!-- Unlimited Wi-Fi hotspot shared data limit. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_data_limit_unlimited">Unlimited</string>
+    <!-- Summary for Wi-Fi hotspot shared data limit. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_data_limit_summary"><xliff:g id="limit">%1$s</xliff:g> per hotspot session</string>
+    <!-- Notification channel for Wi-Fi hotspot data limit warnings. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_data_limit_notification_channel">Hotspot data limit</string>
+    <!-- Notification title shown when the current hotspot session reaches its limit. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_data_limit_reached_title">Hotspot data limit reached</string>
+    <!-- Notification text showing current usage and the configured limit. [CHAR LIMIT=NONE] -->
+    <string name="wifi_tether_data_limit_reached_message">This session has used <xliff:g id="usage">%1$s</xliff:g> of the <xliff:g id="limit">%2$s</xliff:g> limit. Continue sharing?</string>
+    <!-- Notification action to keep the current hotspot session running. [CHAR LIMIT=30] -->
+    <string name="wifi_tether_data_limit_continue">Continue sharing</string>
+    <!-- Notification action to stop the current hotspot session. [CHAR LIMIT=30] -->
+    <string name="wifi_tether_data_limit_stop">Turn off hotspot</string>
+    <!-- Title for Wi-Fi hotspot Wi-Fi generation selection. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_wifi_version_title">Wi-Fi version</string>
+    <!-- Automatic Wi-Fi hotspot Wi-Fi generation. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_wifi_version_auto">Automatic</string>
+    <!-- Wi-Fi hotspot legacy Wi-Fi generation. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_wifi_version_legacy">Wi-Fi 4/5 compatibility</string>
+    <!-- Wi-Fi hotspot Wi-Fi 6 generation. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_wifi_version_wifi6">Wi-Fi 6</string>
+    <!-- Wi-Fi hotspot Wi-Fi 7 generation. [CHAR LIMIT=NONE]-->
+    <string name="wifi_tether_wifi_version_wifi7">Wi-Fi 7</string>
     <!-- Title for Wifi hotspot speed [CHAR LIMIT=NONE]-->
     <string name="wifi_hotspot_speed_title">Speed &amp; compatibility</string>
     <!-- Summary for Wifi hotspot speed to 2.4 GHz band [CHAR LIMIT=NONE]-->
@@ -7658,6 +7852,30 @@
     <string name="data_usage_change_cycle">Change cycle\u2026</string>
     <!-- Body of dialog prompting user to change numerical day of month that data usage cycle should reset. [CHAR LIMIT=64] -->
     <string name="data_usage_pick_cycle_day">Day of month to reset data usage cycle:</string>
+    <!-- Spinner item for showing data usage from the current day. [CHAR LIMIT=20] -->
+    <string name="data_usage_today">Today</string>
+    <!-- Spinner item for showing data usage from the previous day. [CHAR LIMIT=20] -->
+    <string name="data_usage_yesterday">Yesterday</string>
+    <!-- Spinner item that opens a date picker for data usage. [CHAR LIMIT=24] -->
+    <string name="data_usage_select_date">Select date\u2026</string>
+    <!-- Spinner item that opens date pickers for a data usage range. [CHAR LIMIT=24] -->
+    <string name="data_usage_select_range">Select range\u2026</string>
+    <!-- Dialog title for picking a single data usage date. [CHAR LIMIT=30] -->
+    <string name="data_usage_select_date_title">Select date</string>
+    <!-- Dialog title for picking the first date of a data usage range. [CHAR LIMIT=30] -->
+    <string name="data_usage_select_range_start_title">Select start date</string>
+    <!-- Dialog title for picking the last date of a data usage range. [CHAR LIMIT=30] -->
+    <string name="data_usage_select_range_end_title">Select end date</string>
+    <!-- Spinner item for a picked data usage date. [CHAR LIMIT=40] -->
+    <string name="data_usage_custom_date_template"><xliff:g id="date" example="Sep 5, 2026">%1$s</xliff:g></string>
+    <!-- Spinner item for a picked data usage range. [CHAR LIMIT=60] -->
+    <string name="data_usage_custom_range_template"><xliff:g id="range" example="Sep 1 - Sep 5, 2026">%1$s</xliff:g></string>
+    <!-- Label for a tethered Wi-Fi client, showing hostname followed by MAC address. [CHAR LIMIT=60] -->
+    <string name="data_usage_tethering_client_label"><xliff:g id="hostname" example="Pixel Tablet">%1$s</xliff:g> (<xliff:g id="mac_address" example="12:34:56:78:9a:bc">%2$s</xliff:g>)</string>
+    <!-- Label for a tethered client under a specific tethering type. [CHAR LIMIT=80] -->
+    <string name="data_usage_tethering_typed_client_label"><xliff:g id="type" example="USB tethering">%1$s</xliff:g> - <xliff:g id="client" example="Pixel Tablet (12:34:56:78:9a:bc)">%2$s</xliff:g></string>
+    <!-- Row summary while exact tethered client usage is being queried. [CHAR LIMIT=30] -->
+    <string name="data_usage_tethering_usage_loading">Calculating\u2026</string>
     <!-- Label shown when no applications used data during selected time period. [CHAR LIMIT=48] -->
     <string name="data_usage_empty">No apps used data during this period.</string>
     <!-- Label for data usage occuring while application in foreground. [CHAR LIMIT=48] -->
@@ -11582,6 +11800,7 @@
 
     <!-- Brief content description for data usage chart [CHAR LIMIT=NONE] -->
     <string name="data_usage_chart_brief_content_description">Graph showing data usage between <xliff:g id="start_date" example="August 19">%1$s</xliff:g> and <xliff:g id="end_date" example="September 16">%2$s</xliff:g>.</string>
+
 
     <!-- Content description for data usage chart when data is not available [CHAR LIMIT=NONE] -->
     <string name="data_usage_chart_no_data_content_description">No data in this date range</string>

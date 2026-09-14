@@ -5997,4 +5997,113 @@
     <string name="safety_center_account_security_search_terms" msgid="3950829613581775913"></string>
     <string name="safety_center_device_finder_search_terms" msgid="452013643838126923"></string>
     <string name="safety_center_system_component_update_search_terms" msgid="3110390275537109543"></string>
+    <string name="wifi_tether_connected_devices_title">已连接的设备</string>
+    <string name="wifi_tether_connected_devices_summary">查看和屏蔽热点设备</string>
+    <string name="wifi_tether_network_settings_category">网络设置</string>
+    <string name="wifi_tether_devices_usage_category">设备和用量</string>
+    <string name="wifi_tether_advanced_settings_category">高级设置</string>
+    <string name="wifi_tether_devices_usage_title">热点设备与用量</string>
+    <string name="wifi_tether_devices_usage_summary">查看用量记录、临时断开或封禁设备</string>
+    <string name="wifi_tether_devices_usage_summary_with_usage">最近 24 小时已使用 <xliff:g id="usage">%1$s</xliff:g>；查看设备及用量历史</string>
+    <string name="wifi_tether_usage_last_day_summary">最近 24 小时已使用 <xliff:g id="usage">%1$s</xliff:g></string>
+    <string name="wifi_tether_session_usage_title">本次热点共享用量</string>
+    <string name="wifi_tether_connected_devices_connected_title">已连接</string>
+    <string name="wifi_tether_connected_devices_blocked_title">已屏蔽</string>
+    <string name="wifi_tether_connected_devices_empty">没有已连接的设备</string>
+    <string name="wifi_tether_blocked_devices_empty">没有已屏蔽的设备</string>
+    <string name="wifi_tether_history_devices_title">历史连接设备</string>
+    <string name="wifi_tether_history_devices_empty">没有历史连接设备</string>
+    <string name="wifi_tether_client_connected_summary">已连接</string>
+    <string name="wifi_tether_client_blocked_summary">已屏蔽</string>
+    <string name="wifi_tether_client_history_summary">曾经连接</string>
+    <string name="wifi_tether_client_usage_summary"><xliff:g id="connection_type">%1$s</xliff:g>，<xliff:g id="state">%2$s</xliff:g>，<xliff:g id="usage">%3$s</xliff:g></string>
+    <string name="wifi_tether_client_connected_usage_summary"><xliff:g id="connection_type">%1$s</xliff:g>，已连接，本次共享 <xliff:g id="usage">%2$s</xliff:g></string>
+    <string name="wifi_tether_client_history_actions_summary"><xliff:g id="connection_type">%1$s</xliff:g>，点按可查看用量历史或屏蔽</string>
+    <string name="wifi_tether_connection_type_wifi">Wi-Fi 热点</string>
+    <string name="wifi_tether_client_block_title">要屏蔽此设备吗？</string>
+    <string name="wifi_tether_client_block_message">此设备将断开连接，并且在解除屏蔽前无法重新连接。</string>
+    <string name="wifi_tether_client_block">屏蔽</string>
+    <string name="wifi_tether_client_disconnect">临时断开</string>
+    <string name="wifi_tether_client_usage_history">用量历史</string>
+    <string name="wifi_tether_client_disconnected">设备已断开</string>
+    <string name="wifi_tether_client_disconnect_failed">无法断开设备</string>
+    <string name="wifi_tether_client_unblock_title">要解除屏蔽此设备吗？</string>
+    <string name="wifi_tether_client_unblock_message">此设备将可以再次连接到您的热点。</string>
+    <string name="wifi_tether_client_unblock">解除屏蔽</string>
+    <string name="wifi_tether_connected_devices_footer">无法从热点客户端获取设备名称，因此设备会按 MAC 地址显示。</string>
+    <string name="wifi_tether_devices_usage_footer">用量会按连接方式和设备保存。临时断开允许设备重新连接；封禁后设备无法重新连接。</string>
+    <string name="wifi_tether_usage_details_title">热点共享用量</string>
+    <string name="wifi_tether_usage_details_device_title">设备用量</string>
+    <string name="wifi_tether_usage_device_mac_address">MAC 地址：<xliff:g id="mac_address">%1$s</xliff:g></string>
+    <string name="wifi_tether_usage_details_time_range">时间范围</string>
+    <string name="wifi_tether_usage_details_summary_title">用量</string>
+    <string name="wifi_tether_usage_details_devices_title">设备统计</string>
+    <string name="wifi_tether_usage_details_total">总计</string>
+    <string name="wifi_tether_usage_details_download">下载</string>
+    <string name="wifi_tether_usage_details_upload">上传</string>
+    <string name="wifi_tether_usage_details_last_24_hours">最近 24 小时</string>
+    <string name="wifi_tether_usage_details_this_month">本月</string>
+    <string name="wifi_tether_usage_details_usage_split">总计 <xliff:g id="total">%1$s</xliff:g>，上传 <xliff:g id="upload">%2$s</xliff:g>，下载 <xliff:g id="download">%3$s</xliff:g></string>
+    <string name="wifi_tether_usage_details_uncategorized">未分类设备流量</string>
+    <string name="wifi_tether_usage_details_uncategorized_summary">%1$s：热点报告但无法匹配到稳定设备标识的流量。</string>
+    <string name="wifi_tether_usage_details_no_devices">没有共享设备历史记录</string>
+    <string name="wifi_tether_usage_details_device_usage_title">设备用量</string>
+    <string name="wifi_tether_usage_details_actions_title">操作</string>
+    <string name="wifi_tether_usage_unknown_hostname">未知设备</string>
+    <string name="wifi_tether_max_clients_title">最大连接数</string>
+    <string name="wifi_tether_max_clients_auto">自动</string>
+    <string name="wifi_tether_max_clients_summary"><xliff:g id="count">%1$d</xliff:g> 台设备</string>
+    <string name="wifi_tether_feature_unavailable">此设备不支持</string>
+    <string name="wifi_tether_channel_title">热点信道</string>
+    <string name="wifi_tether_channel_auto">自动</string>
+    <string name="wifi_tether_channel_summary"><xliff:g id="band">%1$s</xliff:g> 信道 <xliff:g id="channel">%2$d</xliff:g></string>
+    <string name="wifi_tether_channel_multiple_summary">多个信道</string>
+    <string name="wifi_tether_channel_unavailable">当前配置没有可用信道</string>
+    <string name="wifi_tether_channel_160mhz_summary"><xliff:g id="channel">%1$s</xliff:g>（160 MHz）</string>
+    <string name="wifi_tether_channel_160mhz_auto_summary">自动选择支持 160 MHz 的 5 GHz 信道</string>
+    <string name="wifi_tether_channel_160mhz_supported_summary">支持 160 MHz 模式</string>
+    <string name="wifi_tether_channel_160mhz_disable_hint">选择此信道会关闭 160 MHz 模式</string>
+    <string name="wifi_tether_5g_160mhz_title">5 GHz 160 MHz 模式</string>
+    <string name="wifi_tether_5g_160mhz_summary">有可用 5 GHz 信道时使用 160 MHz 频宽</string>
+    <string name="wifi_tether_5g_160mhz_unavailable">没有可用的 5 GHz 160 MHz 信道</string>
+    <string name="wifi_tether_5g_160mhz_disable_dialog_title">要关闭 160 MHz 模式吗？</string>
+    <string name="wifi_tether_5g_160mhz_disable_dialog_message">所选信道不支持 160 MHz 频宽。是否切换信道并关闭 160 MHz 模式？</string>
+    <string name="wifi_tether_5g_160mhz_disable_dialog_positive">切换</string>
+    <string name="wifi_tether_hotspot_details_title">热点详细信息</string>
+    <string name="wifi_tether_hotspot_details_summary">SSID、频段、频宽、模式和国家代码</string>
+    <string name="wifi_tether_hotspot_details_ssid">SSID</string>
+    <string name="wifi_tether_hotspot_details_bssid">BSSID</string>
+    <string name="wifi_tether_hotspot_details_txpower">发射功率</string>
+    <string name="wifi_tether_hotspot_details_band">频段</string>
+    <string name="wifi_tether_hotspot_details_channel">信道</string>
+    <string name="wifi_tether_hotspot_details_bandwidth">频宽</string>
+    <string name="wifi_tether_hotspot_details_mode">模式</string>
+    <string name="wifi_tether_hotspot_details_country_code">国家代码</string>
+    <string name="wifi_tether_hotspot_details_unavailable">不可用</string>
+    <string name="wifi_tether_hotspot_details_auto">自动</string>
+    <string name="wifi_tether_data_limit_title">单次共享流量限制</string>
+    <string name="wifi_tether_data_limit_unlimited">不限制</string>
+    <string name="wifi_tether_data_limit_summary">每次热点会话 <xliff:g id="limit">%1$s</xliff:g></string>
+    <string name="wifi_tether_data_limit_notification_channel">热点流量限制</string>
+    <string name="wifi_tether_data_limit_reached_title">已达到热点流量限制</string>
+    <string name="wifi_tether_data_limit_reached_message">本次共享已使用 <xliff:g id="usage">%1$s</xliff:g>，限制为 <xliff:g id="limit">%2$s</xliff:g>。是否继续共享？</string>
+    <string name="wifi_tether_data_limit_continue">继续共享</string>
+    <string name="wifi_tether_data_limit_stop">关闭热点</string>
+    <string name="wifi_tether_wifi_version_title">Wi-Fi 版本</string>
+    <string name="wifi_tether_wifi_version_auto">自动</string>
+    <string name="wifi_tether_wifi_version_legacy">Wi-Fi 4/5 兼容模式</string>
+    <string name="wifi_tether_wifi_version_wifi6">Wi-Fi 6</string>
+    <string name="wifi_tether_wifi_version_wifi7">Wi-Fi 7</string>
+    <string name="data_usage_today">今天</string>
+    <string name="data_usage_yesterday">昨天</string>
+    <string name="data_usage_select_date">选择日期\u2026</string>
+    <string name="data_usage_select_range">选择时间段\u2026</string>
+    <string name="data_usage_select_date_title">选择日期</string>
+    <string name="data_usage_select_range_start_title">选择开始日期</string>
+    <string name="data_usage_select_range_end_title">选择结束日期</string>
+    <string name="data_usage_custom_date_template"><xliff:g id="date">%1$s</xliff:g></string>
+    <string name="data_usage_custom_range_template"><xliff:g id="range">%1$s</xliff:g></string>
+    <string name="data_usage_tethering_client_label"><xliff:g id="hostname">%1$s</xliff:g>（<xliff:g id="mac_address">%2$s</xliff:g>）</string>
+    <string name="data_usage_tethering_typed_client_label"><xliff:g id="type">%1$s</xliff:g> - <xliff:g id="client">%2$s</xliff:g></string>
+    <string name="data_usage_tethering_usage_loading">正在计算\u2026</string>
 </resources>

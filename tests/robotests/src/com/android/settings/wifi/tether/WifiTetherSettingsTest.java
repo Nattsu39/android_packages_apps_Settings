@@ -282,6 +282,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_HOTSPOT_SPEED);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
     }
@@ -300,6 +307,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_HOTSPOT_SPEED);
         assertThat(keys).contains(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
     }
@@ -318,6 +332,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_HOTSPOT_SPEED);
         assertThat(keys).contains(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
     }
@@ -336,6 +357,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_HOTSPOT_SPEED);
         assertThat(keys).contains(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
     }
@@ -355,6 +383,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_HOTSPOT_SPEED);
         // contains
         assertThat(keys).contains(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
@@ -374,6 +409,13 @@ public class WifiTetherSettingsTest {
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_NETWORK_PASSWORD);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_AUTO_OFF);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CONNECTED_DEVICES);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_MAX_CLIENTS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_CHANNEL);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_5G_160MHZ);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_HOTSPOT_DETAILS);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_DATA_LIMIT);
+        assertThat(keys).doesNotContain(WifiTetherSettings.KEY_WIFI_TETHER_WIFI_VERSION);
         assertThat(keys).doesNotContain(WifiTetherSettings.KEY_INSTANT_HOTSPOT);
         // contains
         assertThat(keys).contains(WifiTetherSettings.KEY_WIFI_HOTSPOT_SECURITY);

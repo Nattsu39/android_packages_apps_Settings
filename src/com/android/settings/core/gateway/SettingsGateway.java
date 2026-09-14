@@ -220,7 +220,9 @@ import com.android.settings.wifi.calling.WifiCallingSettings;
 import com.android.settings.wifi.details.WifiNetworkDetailsFragment;
 import com.android.settings.wifi.p2p.WifiP2pSettings;
 import com.android.settings.wifi.savedaccesspoints2.SavedAccessPointsWifiSettings2;
+import com.android.settings.wifi.tether.WifiTetherConnectedDevicesSettings;
 import com.android.settings.wifi.tether.WifiTetherSettings;
+import com.android.settings.wifi.tether.WifiTetherUsageDetailsSettings;
 
 public class SettingsGateway {
 
@@ -240,6 +242,8 @@ public class SettingsGateway {
             SmartAutoRotatePreferenceFragment.class.getName(),
             WifiP2pSettings.class.getName(),
             WifiTetherSettings.class.getName(),
+            WifiTetherConnectedDevicesSettings.class.getName(),
+            WifiTetherUsageDetailsSettings.class.getName(),
             BackgroundCheckSummary.class.getName(),
             VpnSettings.class.getName(),
             DataSaverSummary.class.getName(),

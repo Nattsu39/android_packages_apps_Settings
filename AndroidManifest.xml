@@ -60,6 +60,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
     <uses-permission android:name="android.permission.ACCESS_CHECKIN_PROPERTIES"/>
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
@@ -100,6 +101,7 @@
     <uses-permission android:name="android.permission.OEM_UNLOCK_STATE" />
     <uses-permission android:name="android.permission.MANAGE_USER_OEM_UNLOCK_STATE" />
     <uses-permission android:name="android.permission.OVERRIDE_WIFI_CONFIG" />
+    <uses-permission android:name="android.permission.MANAGE_WIFI_COUNTRY_CODE" />
     <uses-permission android:name="android.permission.RESTART_WIFI_SUBSYSTEM" />
     <uses-permission android:name="android.permission.MANAGE_FINGERPRINT" />
     <uses-permission android:name="android.permission.RECOVERY"/>
@@ -877,6 +879,21 @@
         <service android:name=".wifi.tether.TetherService"
             android:exported="true"
             android:permission="android.permission.TETHER_PRIVILEGED" />
+
+        <service
+            android:name=".wifi.tether.WifiTetherDataLimitService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".wifi.tether.WifiTetherDataLimitReceiver"
+            android:exported="true"
+            android:permission="android.permission.NETWORK_SETTINGS">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
+                <action android:name="android.net.conn.TETHER_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".network.TetherProvisioningActivity"
             android:exported="true"

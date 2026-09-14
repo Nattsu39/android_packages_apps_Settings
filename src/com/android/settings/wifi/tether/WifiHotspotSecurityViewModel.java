@@ -82,18 +82,26 @@ public class WifiHotspotSecurityViewModel extends AndroidViewModel {
         for (Map.Entry<Integer, ViewItem> entry : mViewItemMap.entrySet()) {
             entry.getValue().mIsChecked = entry.getKey().equals(securityType);
         }
+        updateSecurityEnabledState(mWifiHotspotRepository.getSpeedType().getValue());
         updateViewItemListData();
     }
 
     protected void onSpeedTypeChanged(Integer speedType) {
         log("onSpeedTypeChanged(), speedType:" + speedType);
-        boolean isWpa3Only = (speedType == SPEED_6GHZ);
+        updateSecurityEnabledState(speedType);
+        updateViewItemListData();
+    }
+
+    private void updateSecurityEnabledState(Integer speedType) {
+        boolean isWpa3Only = speedType != null && speedType == SPEED_6GHZ;
         for (Map.Entry<Integer, ViewItem> entry : mViewItemMap.entrySet()) {
-            if (entry.getKey() != SECURITY_TYPE_WPA3_SAE) {
+            final int securityType = entry.getKey();
+            if (isWpa3SecurityType(securityType)) {
+                entry.getValue().mIsEnabled = mWifiHotspotRepository.isWpa3SaeSupported();
+            } else {
                 entry.getValue().mIsEnabled = !isWpa3Only;
             }
         }
-        updateViewItemListData();
     }
 
     /**
@@ -104,6 +112,11 @@ public class WifiHotspotSecurityViewModel extends AndroidViewModel {
         for (Map.Entry<Integer, ViewItem> entry : mViewItemMap.entrySet()) {
             ViewItem viewItem = entry.getValue();
             if (viewItem.mKey.equals(key)) {
+                if (isWpa3SecurityType(entry.getKey())
+                        && !mWifiHotspotRepository.isWpa3SaeSupported()) {
+                    log("Ignore unsupported WPA3 security selection");
+                    return;
+                }
                 mWifiHotspotRepository.setSecurityType(entry.getKey());
                 return;
             }
@@ -160,5 +173,10 @@ public class WifiHotspotSecurityViewModel extends AndroidViewModel {
 
     private void log(String msg) {
         FeatureFactory.getFeatureFactory().getWifiFeatureProvider().verboseLog(TAG, msg);
+    }
+
+    private boolean isWpa3SecurityType(int securityType) {
+        return securityType == SECURITY_TYPE_WPA3_SAE
+                || securityType == SECURITY_TYPE_WPA3_SAE_TRANSITION;
     }
 }

@@ -20,49 +20,107 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:title="@string/wifi_hotspot_checkbox_text">
 
-    <com.android.settings.wifi.tether.WifiTetherSsidPreference
-        android:key="wifi_tether_network_name"
-        android:title="@string/wifi_hotspot_name_title"
-        android:summary="@string/summary_placeholder"/>
+    <PreferenceCategory
+        android:key="wifi_tether_network_settings_category"
+        android:title="@string/wifi_tether_network_settings_category">
 
-    <ListPreference
-        android:key="wifi_tether_security"
-        android:title="@string/wifi_security"
-        android:summary="@string/summary_placeholder"
-        android:entries="@array/wifi_tether_security"
-        android:entryValues="@array/wifi_tether_security_values"/>
+        <com.android.settings.wifi.tether.WifiTetherSsidPreference
+            android:key="wifi_tether_network_name"
+            android:title="@string/wifi_hotspot_name_title"
+            android:summary="@string/summary_placeholder"/>
 
-    <Preference
-        android:key="wifi_hotspot_security"
-        android:title="@string/wifi_security"
-        android:summary="@string/summary_placeholder"
-        android:fragment="com.android.settings.wifi.tether.WifiHotspotSecuritySettings"
-        settings:isPreferenceVisible="@bool/config_show_wifi_hotspot_speed"/>
+        <ListPreference
+            android:key="wifi_tether_security"
+            android:title="@string/wifi_security"
+            android:summary="@string/summary_placeholder"
+            android:entries="@array/wifi_tether_security"
+            android:entryValues="@array/wifi_tether_security_values"/>
 
-    <com.android.settings.widget.ValidatedEditTextPreference
-        android:key="wifi_tether_network_password"
-        android:persistent="false"
-        android:title="@string/wifi_hotspot_password_title"/>
+        <Preference
+            android:key="wifi_hotspot_security"
+            android:title="@string/wifi_security"
+            android:summary="@string/summary_placeholder"
+            android:fragment="com.android.settings.wifi.tether.WifiHotspotSecuritySettings"
+            settings:isPreferenceVisible="@bool/config_show_wifi_hotspot_speed"/>
 
-    <SwitchPreferenceCompat
-        android:key="wifi_tether_auto_turn_off"
-        android:title="@string/wifi_hotspot_auto_off_title"
-        android:summary="@string/wifi_hotspot_auto_off_summary"/>
+        <com.android.settings.widget.ValidatedEditTextPreference
+            android:key="wifi_tether_network_password"
+            android:persistent="false"
+            android:title="@string/wifi_hotspot_password_title"/>
 
-    <SwitchPreferenceCompat
-        android:key="wifi_tether_maximize_compatibility"
-        android:title="@string/wifi_hotspot_maximize_compatibility"/>
+        <SwitchPreferenceCompat
+            android:key="wifi_tether_auto_turn_off"
+            android:title="@string/wifi_hotspot_auto_off_title"
+            android:summary="@string/wifi_hotspot_auto_off_summary"/>
 
-    <Preference
-        android:key="wifi_hotspot_speed"
-        android:title="@string/wifi_hotspot_speed_title"
-        android:summary="@string/summary_placeholder"
-        android:fragment="com.android.settings.wifi.tether.WifiHotspotSpeedSettings"
-        settings:isPreferenceVisible="@bool/config_show_wifi_hotspot_speed"/>
+        <SwitchPreferenceCompat
+            android:key="wifi_tether_maximize_compatibility"
+            android:title="@string/wifi_hotspot_maximize_compatibility"/>
+    </PreferenceCategory>
 
-    <Preference
-        android:key="wifi_hotspot_instant"
-        android:title="@string/wifi_hotspot_instant_title"
-        android:summary="@string/summary_placeholder"
-        settings:isPreferenceVisible="false"/>
+    <PreferenceCategory
+        android:key="wifi_tether_devices_usage_category"
+        android:title="@string/wifi_tether_devices_usage_category">
+
+        <Preference
+            android:key="wifi_tether_connected_devices"
+            android:title="@string/wifi_tether_devices_usage_title"
+            android:summary="@string/wifi_tether_devices_usage_summary"
+            android:fragment="com.android.settings.wifi.tether.WifiTetherConnectedDevicesSettings"/>
+
+        <ListPreference
+            android:key="wifi_tether_max_clients"
+            android:title="@string/wifi_tether_max_clients_title"
+            android:summary="@string/summary_placeholder"
+            android:entries="@array/wifi_tether_max_client_count"
+            android:entryValues="@array/wifi_tether_max_client_count_values"/>
+
+        <ListPreference
+            android:key="wifi_tether_shared_data_limit"
+            android:title="@string/wifi_tether_data_limit_title"
+            android:summary="@string/summary_placeholder"
+            android:entries="@array/wifi_tether_shared_data_limit"
+            android:entryValues="@array/wifi_tether_shared_data_limit_values"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="wifi_tether_advanced_settings_category"
+        android:title="@string/wifi_tether_advanced_settings_category">
+
+        <Preference
+            android:key="wifi_tether_channel"
+            android:title="@string/wifi_tether_channel_title"
+            android:summary="@string/summary_placeholder"
+            android:fragment="com.android.settings.wifi.tether.WifiTetherChannelSettings"/>
+
+        <SwitchPreferenceCompat
+            android:key="wifi_tether_5g_160mhz"
+            android:title="@string/wifi_tether_5g_160mhz_title"
+            android:summary="@string/wifi_tether_5g_160mhz_summary"/>
+
+        <ListPreference
+            android:key="wifi_tether_wifi_version"
+            android:title="@string/wifi_tether_wifi_version_title"
+            android:summary="@string/summary_placeholder"
+            android:entries="@array/wifi_tether_wifi_version"
+            android:entryValues="@array/wifi_tether_wifi_version_values"/>
+
+        <Preference
+            android:key="wifi_tether_hotspot_details"
+            android:title="@string/wifi_tether_hotspot_details_title"
+            android:summary="@string/wifi_tether_hotspot_details_summary"/>
+
+        <Preference
+            android:key="wifi_hotspot_speed"
+            android:title="@string/wifi_hotspot_speed_title"
+            android:summary="@string/summary_placeholder"
+            android:fragment="com.android.settings.wifi.tether.WifiHotspotSpeedSettings"
+            settings:isPreferenceVisible="@bool/config_show_wifi_hotspot_speed"/>
+
+        <Preference
+            android:key="wifi_hotspot_instant"
+            android:title="@string/wifi_hotspot_instant_title"
+            android:summary="@string/summary_placeholder"
+            settings:isPreferenceVisible="false"/>
+    </PreferenceCategory>
 </PreferenceScreen>

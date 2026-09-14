@@ -30,7 +30,9 @@ import androidx.preference.Preference;
 import com.android.settings.R;
 import com.android.settings.overlay.FeatureFactory;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,12 +41,13 @@ import java.util.Map;
 public class WifiTetherSecurityPreferenceController extends WifiTetherBasePreferenceController
         implements WifiManager.SoftApCallback {
 
+    private static final String TAG = "WifiTetherSecurityPref";
     private static final String PREF_KEY = "wifi_tether_security";
 
-    private Map<Integer, String> mSecurityMap = new LinkedHashMap<Integer, String>();
+    private final Map<Integer, String> mSecurityMap = new LinkedHashMap<>();
     private int mSecurityValue;
     @VisibleForTesting
-    boolean mIsWpa3Supported = true;
+    boolean mIsWpa3Supported;
     @VisibleForTesting
     boolean mShouldHidePreference;
 
@@ -91,16 +94,10 @@ public class WifiTetherSecurityPreferenceController extends WifiTetherBasePrefer
             return;
         }
         final ListPreference preference = (ListPreference) mPreference;
-        // If the device is not support WPA3 then remove the WPA3 options.
-        if (!mIsWpa3Supported && mSecurityMap.keySet()
-                .removeIf(key -> key > SoftApConfiguration.SECURITY_TYPE_WPA2_PSK)) {
-            preference.setEntries(mSecurityMap.values().stream().toArray(CharSequence[]::new));
-            preference.setEntryValues(mSecurityMap.keySet().stream().map(i -> Integer.toString(i))
-                    .toArray(CharSequence[]::new));
-        }
+        updateEntries(preference);
 
         final int securityType = mWifiManager.getSoftApConfiguration().getSecurityType();
-        mSecurityValue = mSecurityMap.get(securityType) != null
+        mSecurityValue = shouldShowSecurityType(securityType)
                 ? securityType : SoftApConfiguration.SECURITY_TYPE_WPA2_PSK;
 
         preference.setSummary(mSecurityMap.get(mSecurityValue));
@@ -109,7 +106,12 @@ public class WifiTetherSecurityPreferenceController extends WifiTetherBasePrefer
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        mSecurityValue = Integer.parseInt((String) newValue);
+        final int securityType = Integer.parseInt((String) newValue);
+        if (!shouldShowSecurityType(securityType)) {
+            Log.w(TAG, "Ignore unsupported security type: " + securityType);
+            return false;
+        }
+        mSecurityValue = securityType;
         preference.setSummary(mSecurityMap.get(mSecurityValue));
         if (mListener != null) {
             mListener.onTetherConfigUpdated(this);
@@ -133,5 +135,28 @@ public class WifiTetherSecurityPreferenceController extends WifiTetherBasePrefer
 
     public int getSecurityType() {
         return mSecurityValue;
+    }
+
+    private void updateEntries(ListPreference preference) {
+        final List<CharSequence> entries = new ArrayList<>();
+        final List<CharSequence> values = new ArrayList<>();
+        for (Map.Entry<Integer, String> entry : mSecurityMap.entrySet()) {
+            if (shouldShowSecurityType(entry.getKey())) {
+                entries.add(entry.getValue());
+                values.add(Integer.toString(entry.getKey()));
+            }
+        }
+        preference.setEntries(entries.toArray(new CharSequence[0]));
+        preference.setEntryValues(values.toArray(new CharSequence[0]));
+    }
+
+    private boolean shouldShowSecurityType(int securityType) {
+        return mSecurityMap.containsKey(securityType)
+                && (!isWpa3SecurityType(securityType) || mIsWpa3Supported);
+    }
+
+    private boolean isWpa3SecurityType(int securityType) {
+        return securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_SAE
+                || securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_SAE_TRANSITION;
     }
 }

@@ -21,6 +21,7 @@ import static android.net.wifi.SoftApConfiguration.BAND_2GHZ;
 import static android.net.wifi.SoftApConfiguration.BAND_5GHZ;
 import static android.net.wifi.SoftApConfiguration.BAND_6GHZ;
 import static android.net.wifi.SoftApConfiguration.SECURITY_TYPE_OPEN;
+import static android.net.wifi.SoftApConfiguration.SECURITY_TYPE_WPA2_PSK;
 import static android.net.wifi.SoftApConfiguration.SECURITY_TYPE_WPA3_SAE;
 import static android.net.wifi.SoftApConfiguration.SECURITY_TYPE_WPA3_SAE_TRANSITION;
 import static android.net.wifi.WifiAvailableChannel.OP_MODE_SAP;
@@ -107,6 +108,7 @@ public class WifiHotspotRepository {
     protected Boolean mIs6gBandSupported;
     protected SapBand mBand6g = new SapBand(WifiScanner.WIFI_BAND_6_GHZ);
     protected MutableLiveData<Boolean> m6gAvailable;
+    protected boolean mIsWpa3SaeSupported;
     protected ActiveCountryCodeChangedCallback mActiveCountryCodeChangedCallback;
 
     @VisibleForTesting
@@ -193,6 +195,7 @@ public class WifiHotspotRepository {
             Log.e(TAG, "Skip setSoftApConfiguration because hotspot is restarting.");
             return;
         }
+        config = sanitizeSoftApConfiguration(config);
         mWifiManager.setSoftApConfiguration(config);
         refresh();
         restartTetheringIfNeeded();
@@ -240,6 +243,7 @@ public class WifiHotspotRepository {
         }
         SoftApConfiguration config = mWifiManager.getSoftApConfiguration();
         int securityType = (config != null) ? config.getSecurityType() : SECURITY_TYPE_OPEN;
+        securityType = getSupportedSecurityType(securityType);
         log("updateSecurityType(), securityType:" + securityType);
         mSecurityType.setValue(securityType);
     }
@@ -251,6 +255,7 @@ public class WifiHotspotRepository {
      */
     public void setSecurityType(int securityType) {
         log("setSecurityType():" + securityType);
+        securityType = getSupportedSecurityType(securityType);
         if (mSecurityType == null) {
             getSecurityType();
         }
@@ -341,6 +346,10 @@ public class WifiHotspotRepository {
         }
         SoftApConfiguration.Builder configBuilder = new SoftApConfiguration.Builder(config);
         if (speedType == SPEED_6GHZ) {
+            if (!isWpa3SaeSupported()) {
+                Log.w(TAG, "Skip 6 GHz hotspot because WPA3 SAE is not supported");
+                return;
+            }
             log("setSpeedType(), setBand(BAND_2GHZ_5GHZ_6GHZ)");
             configBuilder.setBand(BAND_2GHZ_5GHZ_6GHZ);
             if (config.getSecurityType() != SECURITY_TYPE_WPA3_SAE) {
@@ -363,7 +372,8 @@ public class WifiHotspotRepository {
             // we're moving from 6GHz to something else.
             String passphrase = generatePassword(config);
             if ((passphrase.length() >= 8) && (config.getBand() & BAND_6GHZ) != 0) {
-                configBuilder.setPassphrase(passphrase, SECURITY_TYPE_WPA3_SAE_TRANSITION);
+                configBuilder.setPassphrase(passphrase, isWpa3SaeSupported()
+                        ? SECURITY_TYPE_WPA3_SAE_TRANSITION : SECURITY_TYPE_WPA2_PSK);
             }
         }
         setSoftApConfiguration(configBuilder.build());
@@ -446,6 +456,9 @@ public class WifiHotspotRepository {
      * @return {@code true} if Wi-Fi Hotspot 6 GHz Band is available
      */
     public boolean is6gAvailable() {
+        if (!isWpa3SaeSupported()) {
+            return false;
+        }
         if (isForce6GhzHotspotEnabled()) {
             return is6GHzBandSupported();
         }
@@ -470,6 +483,13 @@ public class WifiHotspotRepository {
         if (m6gAvailable != null) {
             m6gAvailable.setValue(is6gAvailable());
         }
+    }
+
+    /**
+     * Return whether WPA3 SAE is supported for Wi-Fi hotspot.
+     */
+    public boolean isWpa3SaeSupported() {
+        return mIsWpa3SaeSupported;
     }
 
     @VisibleForTesting
@@ -678,9 +698,17 @@ public class WifiHotspotRepository {
         @Override
         public void onCapabilityChanged(@NonNull SoftApCapability softApCapability) {
             log("onCapabilityChanged(), softApCapability:" + softApCapability);
+            final boolean wasWpa3SaeSupported = mIsWpa3SaeSupported;
+            mIsWpa3SaeSupported = softApCapability.areFeaturesSupported(
+                    SoftApCapability.SOFTAP_FEATURE_WPA3_SAE);
             mBand5g.hasCapability = softApCapability.getSupportedChannelList(BAND_5GHZ).length > 0;
             mBand6g.hasCapability = softApCapability.getSupportedChannelList(BAND_6GHZ).length > 0;
             updateCapabilityChanged();
+            if (wasWpa3SaeSupported != mIsWpa3SaeSupported) {
+                update6gAvailable();
+                updateSpeedType();
+            }
+            updateSecurityType();
         }
     }
 
@@ -733,5 +761,32 @@ public class WifiHotspotRepository {
 
     private void log(String msg) {
         FeatureFactory.getFeatureFactory().getWifiFeatureProvider().verboseLog(TAG, msg);
+    }
+
+    private SoftApConfiguration sanitizeSoftApConfiguration(@NonNull SoftApConfiguration config) {
+        if (!isWpa3SecurityType(config.getSecurityType()) || isWpa3SaeSupported()) {
+            return config;
+        }
+
+        Log.w(TAG, "Downgrade unsupported WPA3 hotspot configuration to WPA2");
+        SoftApConfiguration.Builder builder = new SoftApConfiguration.Builder(config);
+        builder.setPassphrase(generatePassword(config), SECURITY_TYPE_WPA2_PSK);
+        if ((config.getBand() & BAND_6GHZ) != 0) {
+            builder.setBand(is5gAvailable() ? BAND_2GHZ_5GHZ : BAND_2GHZ);
+        }
+        return builder.build();
+    }
+
+    private int getSupportedSecurityType(int securityType) {
+        if (isWpa3SecurityType(securityType) && !isWpa3SaeSupported()) {
+            Log.w(TAG, "WPA3 SAE is not supported, falling back to WPA2");
+            return SECURITY_TYPE_WPA2_PSK;
+        }
+        return securityType;
+    }
+
+    private boolean isWpa3SecurityType(int securityType) {
+        return securityType == SECURITY_TYPE_WPA3_SAE
+                || securityType == SECURITY_TYPE_WPA3_SAE_TRANSITION;
     }
 }

@@ -160,6 +160,74 @@
         <item>0</item>
     </string-array>
 
+    <!-- Maximum number of clients for wireless tether -->
+    <string-array name="wifi_tether_max_client_count">
+        <item>@string/wifi_tether_max_clients_auto</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <!-- Values for maximum number of clients for wireless tether -->
+    <string-array name="wifi_tether_max_client_count_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <!-- Shared data limit choices for wireless tether -->
+    <string-array name="wifi_tether_shared_data_limit">
+        <item>@string/wifi_tether_data_limit_unlimited</item>
+        <item>100 MB</item>
+        <item>500 MB</item>
+        <item>1 GB</item>
+        <item>2 GB</item>
+        <item>5 GB</item>
+        <item>10 GB</item>
+    </string-array>
+
+    <!-- Values for shared data limit choices for wireless tether, in bytes -->
+    <string-array name="wifi_tether_shared_data_limit_values" translatable="false">
+        <item>-1</item>
+        <item>104857600</item>
+        <item>524288000</item>
+        <item>1073741824</item>
+        <item>2147483648</item>
+        <item>5368709120</item>
+        <item>10737418240</item>
+    </string-array>
+
+    <!-- Wi-Fi generation choices for wireless tether -->
+    <string-array name="wifi_tether_wifi_version">
+        <item>@string/wifi_tether_wifi_version_auto</item>
+        <item>@string/wifi_tether_wifi_version_legacy</item>
+        <item>@string/wifi_tether_wifi_version_wifi6</item>
+        <item>@string/wifi_tether_wifi_version_wifi7</item>
+    </string-array>
+
+    <!-- Values for Wi-Fi generation choices for wireless tether -->
+    <string-array name="wifi_tether_wifi_version_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <!-- Match this with the constants in WifiDialog. --> <skip />
     <!-- Wi-Fi settings.  The type of EAP method a Wi-Fi network has. -->
     <string-array name="wifi_eap_method" translatable="false">
