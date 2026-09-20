@@ -43,4 +43,8 @@
     <string name="avium_aod_schedule_end_time_title">End time</string>
     <string name="avium_aod_shake_title">Shake to show</string>
     <string name="avium_aod_shake_summary">Shake the device to show 10s</string>
+    <string name="avium_app_launch_reset">Clear app launch permissions</string>
+    <string name="avium_app_launch_reset_summary">Clear remembered permissions. Apps will ask again before opening another app.</string>
+    <string name="avium_app_launch_reset_done">App launch permissions cleared</string>
+    <string name="avium_app_launch_reset_failed">Could not clear app launch permissions</string>
 </resources>

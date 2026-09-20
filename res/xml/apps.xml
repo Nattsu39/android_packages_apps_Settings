@@ -134,4 +134,10 @@
         </Preference>
     </PreferenceCategory>
 
+    <Preference
+        android:key="reset_app_launch_grants"
+        android:title="@string/avium_app_launch_reset"
+        android:summary="@string/avium_app_launch_reset_summary"
+        android:icon="@drawable/ic_restore"
+        android:order="19" />
 </PreferenceScreen>

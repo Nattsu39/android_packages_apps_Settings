@@ -43,4 +43,8 @@
     <string name="avium_aod_schedule_end_time_title">結束時間</string>
     <string name="avium_aod_shake_title">搖動顯示</string>
     <string name="avium_aod_shake_summary">搖動裝置以觸發螢幕常亮10秒</string>
+    <string name="avium_app_launch_reset">清除應用程式跳轉授權</string>
+    <string name="avium_app_launch_reset_summary">清除已記住的允許規則，應用程式跳轉時將重新詢問。</string>
+    <string name="avium_app_launch_reset_done">應用程式跳轉授權已清除</string>
+    <string name="avium_app_launch_reset_failed">無法清除應用程式跳轉授權</string>
 </resources>

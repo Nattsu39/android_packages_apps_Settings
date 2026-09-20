@@ -60,6 +60,37 @@ public class AppDashboardFragment extends DashboardFragment {
     }
 
     @Override
+    public void onCreate(android.os.Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final androidx.preference.Preference resetLaunchGrants = findPreference("reset_app_launch_grants");
+        if (resetLaunchGrants != null) {
+            resetLaunchGrants.setOnPreferenceClickListener(preference -> {
+                new android.app.AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.avium_app_launch_reset)
+                        .setMessage(R.string.avium_app_launch_reset_summary)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            final Context context = requireContext();
+                            final android.os.UserManager users =
+                                    context.getSystemService(android.os.UserManager.class);
+                            final android.content.pm.UserInfo parent =
+                                    users.getProfileParent(context.getUserId());
+                            final int ownerId = parent == null ? context.getUserId() : parent.id;
+                            final boolean saved = android.provider.Settings.Secure.putStringForUser(
+                                    context.getContentResolver(), "avium_app_launch_grants",
+                                    "[]", ownerId);
+                            android.widget.Toast.makeText(context, saved
+                                    ? R.string.avium_app_launch_reset_done
+                                    : R.string.avium_app_launch_reset_failed,
+                                    android.widget.Toast.LENGTH_SHORT).show();
+                        }).show();
+                return true;
+            });
+        }
+
+    }
+
+    @Override
     public int getMetricsCategory() {
         return SettingsEnums.MANAGE_APPLICATIONS;
     }

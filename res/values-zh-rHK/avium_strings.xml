@@ -33,4 +33,8 @@
     <string name="app_volume">應用程式音量</string>
     <string name="app_volume_title">個別應用控制音量</string>
     <string name="app_volume_summary">允許為每個應用設定不同的音量</string>
+    <string name="avium_app_launch_reset">清除應用程式跳轉授權</string>
+    <string name="avium_app_launch_reset_summary">清除已記住的允許規則，應用程式跳轉時將重新詢問。</string>
+    <string name="avium_app_launch_reset_done">應用程式跳轉授權已清除</string>
+    <string name="avium_app_launch_reset_failed">無法清除應用程式跳轉授權</string>
 </resources>
