@@ -118,6 +118,64 @@ android_robolectric_test {
     strict_mode: false,
 }
 
+// Run the refresh-rate controller regressions without compiling the full test source tree.
+android_robolectric_test {
+    name: "SettingsRefreshRateRoboTests",
+    srcs: [
+        "src/com/android/settings/display/RefreshRateListPreferenceControllersTest.java",
+    ],
+
+    static_libs: [
+        "Robolectric_shadows_androidx_fragment_upstream",
+        "Settings-robo-testutils",
+        "Settings-testutils2",
+        "SettingsLib-robo-testutils",
+        "SettingsLibIpc-testutils",
+        "SettingsLibPreference-testutils",
+        "Settings_robolectric_meta_service_file",
+        "aconfig_settings_flags_lib",
+        "android.webkit.flags-aconfig-java",
+        "androidx.lifecycle_lifecycle-runtime-testing",
+        "androidx.test.core",
+        "androidx.test.espresso.core",
+        "androidx.test.ext.junit",
+        "androidx.test.rules",
+        "androidx.test.runner",
+        "com_android_server_accessibility_flags_lib",
+        "flag-junit",
+        "flag-junit-base",
+        "kotlin-test",
+        "mockito-robolectric-prebuilt", // Keep the same Mockito dependency order as SettingsRoboTests.
+        "mockito-kotlin2",
+        "notification_flags_lib",
+        "platform-test-annotations",
+        "testables",
+        "android.app.flags-aconfig-java",
+        "com_android_systemui_flags_lib",
+        "device_policy_aconfig_flags_lib",
+    ],
+
+    libs: [
+        "android.test.mock.impl",
+        "framework-virtualization.stubs.system",
+        "ims-common",
+    ],
+
+    associates: ["Settings-core"],
+    instrumentation_for: "SettingsRoboTestStub",
+    // AssetManager in the ROM runtime also loads the Lineage framework resources.
+    java_resources: [":org.lineageos.platform-res"],
+    java_resource_dirs: [
+        "focused-config",
+        "resources",
+    ],
+    test_options: {
+        timeout: 600,
+        shards: 1,
+    },
+    strict_mode: false,
+}
+
 java_library {
     name: "DSAutoRotateSetting-testutils",
     srcs: [

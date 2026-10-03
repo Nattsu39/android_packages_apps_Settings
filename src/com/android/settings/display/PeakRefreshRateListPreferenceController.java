@@ -17,7 +17,9 @@
 
 package com.android.settings.display;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.provider.DeviceConfig;
@@ -50,6 +52,7 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
     private static final float INVALIDATE_REFRESH_RATE = -1f;
 
     private final Handler mHandler;
+    private final ContentObserver mRefreshRateObserver;
     private final IDeviceConfigChange mOnDeviceConfigChange;
     private final DeviceConfigDisplaySettings mDeviceConfigDisplaySettings;
     private ListPreference mListPreference;
@@ -64,6 +67,12 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
     public PeakRefreshRateListPreferenceController(Context context, String key) {
         super(context, key);
         mHandler = new Handler(context.getMainLooper());
+        mRefreshRateObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateState(mListPreference);
+            }
+        };
         mDeviceConfigDisplaySettings = new DeviceConfigDisplaySettings();
         mOnDeviceConfigChange =
                 new IDeviceConfigChange() {
@@ -106,7 +115,8 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
 
     @Override
     public int getAvailabilityStatus() {
-        if (mContext.getResources().getBoolean(R.bool.config_show_peak_refresh_rate_switch)) {
+        if (mContext.getResources().getBoolean(R.bool.config_show_peak_refresh_rate_switch)
+                && mEntries.size() > 1) {
             return AVAILABLE;
         } else {
             return UNSUPPORTED_ON_DEVICE;
@@ -115,6 +125,9 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
 
     @Override
     public void updateState(Preference preference) {
+        if (mListPreference == null || mEntries.isEmpty()) {
+            return;
+        }
         final float currentValue = Settings.System.getFloat(mContext.getContentResolver(),
                 Settings.System.PEAK_REFRESH_RATE, getDefaultPeakRefreshRate());
         int index = mListPreference.findIndexOfValue(
@@ -126,8 +139,15 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Settings.System.putFloat(mContext.getContentResolver(), Settings.System.PEAK_REFRESH_RATE,
-                Float.valueOf((String) newValue));
+        final ContentResolver resolver = mContext.getContentResolver();
+        final float peakRefreshRate = Float.parseFloat((String) newValue);
+        final float minRefreshRate = Settings.System.getFloat(resolver,
+                Settings.System.MIN_REFRESH_RATE, 0f);
+        if (minRefreshRate > peakRefreshRate) {
+            // Otherwise DisplayModeDirector raises the effective peak back to the old minimum.
+            Settings.System.putFloat(resolver, Settings.System.MIN_REFRESH_RATE, peakRefreshRate);
+        }
+        Settings.System.putFloat(resolver, Settings.System.PEAK_REFRESH_RATE, peakRefreshRate);
         updateState(preference);
         return true;
     }
@@ -135,11 +155,16 @@ public class PeakRefreshRateListPreferenceController extends BasePreferenceContr
     @Override
     public void onStart() {
         mDeviceConfigDisplaySettings.startListening();
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.PEAK_REFRESH_RATE), false,
+                mRefreshRateObserver);
+        updateState(mListPreference);
     }
 
     @Override
     public void onStop() {
         mDeviceConfigDisplaySettings.stopListening();
+        mContext.getContentResolver().unregisterContentObserver(mRefreshRateObserver);
     }
 
     private float findPeakRefreshRate(Display.Mode[] modes) {

@@ -18,8 +18,14 @@ package com.android.settings.display;
 
 import static android.provider.Settings.System.MIN_REFRESH_RATE;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
+import android.hardware.display.DisplayManager;
+import android.os.Handler;
+import android.provider.DeviceConfig;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Display;
 
 import androidx.preference.ListPreference;
@@ -28,6 +34,9 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
+import com.android.settingslib.core.lifecycle.LifecycleObserver;
+import com.android.settingslib.core.lifecycle.events.OnStart;
+import com.android.settingslib.core.lifecycle.events.OnStop;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,10 +44,12 @@ import java.util.List;
 import java.util.Locale;
 
 public class MinRefreshRatePreferenceController extends BasePreferenceController
-        implements Preference.OnPreferenceChangeListener {
+        implements LifecycleObserver, OnStart, OnStop, Preference.OnPreferenceChangeListener {
 
+    private static final String TAG = "MinRefreshRatePrefCtr";
     private static final String KEY_MIN_REFRESH_RATE = "min_refresh_rate";
 
+    private final ContentObserver mRefreshRateObserver;
     private ListPreference mListPreference;
 
     private List<String> mEntries = new ArrayList<>();
@@ -46,10 +57,24 @@ public class MinRefreshRatePreferenceController extends BasePreferenceController
 
     public MinRefreshRatePreferenceController(Context context) {
         super(context, KEY_MIN_REFRESH_RATE);
+        mRefreshRateObserver = new ContentObserver(new Handler(context.getMainLooper())) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateState(mListPreference);
+            }
+        };
 
         if (mContext.getResources().getBoolean(R.bool.config_show_min_refresh_rate_switch)) {
-            Display.Mode mode = mContext.getDisplay().getMode();
-            Display.Mode[] modes = mContext.getDisplay().getSupportedModes();
+            final DisplayManager displayManager =
+                    mContext.getSystemService(DisplayManager.class);
+            final Display display = displayManager != null
+                    ? displayManager.getDisplay(Display.DEFAULT_DISPLAY) : null;
+            if (display == null) {
+                Log.w(TAG, "No valid default display device");
+                return;
+            }
+            Display.Mode mode = display.getMode();
+            Display.Mode[] modes = display.getSupportedModes();
             Arrays.sort(modes, (mode1, mode2) ->
                 Float.compare(mode2.getRefreshRate(), mode1.getRefreshRate()));
             for (Display.Mode m : modes) {
@@ -84,21 +109,57 @@ public class MinRefreshRatePreferenceController extends BasePreferenceController
 
     @Override
     public void updateState(Preference preference) {
+        if (mListPreference == null || mEntries.isEmpty()) {
+            return;
+        }
         final float currentValue = Settings.System.getFloat(mContext.getContentResolver(),
                 MIN_REFRESH_RATE, 60.00f);
         int index = mListPreference.findIndexOfValue(
                 String.format(Locale.US, "%.02f", currentValue));
-        if (index < 0) index = 0;
+        if (Float.isInfinite(currentValue)) {
+            index = 0;
+        } else if (index < 0) {
+            index = mEntries.size() - 1;
+        }
         mListPreference.setValueIndex(index);
         mListPreference.setSummary(mListPreference.getEntries()[index]);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Settings.System.putFloat(mContext.getContentResolver(), MIN_REFRESH_RATE,
-                Float.valueOf((String) newValue));
+        final ContentResolver resolver = mContext.getContentResolver();
+        final float minRefreshRate = Float.parseFloat((String) newValue);
+        final float peakRefreshRate = Settings.System.getFloat(resolver,
+                Settings.System.PEAK_REFRESH_RATE, getDefaultPeakRefreshRate());
+        // A zero peak means there is no user-set upper bound.
+        if (peakRefreshRate != 0f && minRefreshRate > peakRefreshRate) {
+            // Keep the user's new lower bound valid without requiring a second menu change.
+            Settings.System.putFloat(resolver, Settings.System.PEAK_REFRESH_RATE, minRefreshRate);
+        }
+        Settings.System.putFloat(resolver, MIN_REFRESH_RATE, minRefreshRate);
         updateState(preference);
         return true;
+    }
+
+    @Override
+    public void onStart() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(MIN_REFRESH_RATE), false, mRefreshRateObserver);
+        updateState(mListPreference);
+    }
+
+    @Override
+    public void onStop() {
+        mContext.getContentResolver().unregisterContentObserver(mRefreshRateObserver);
+    }
+
+    private float getDefaultPeakRefreshRate() {
+        final float configuredDefault = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_defaultPeakRefreshRate);
+        final float deviceConfigDefault = DeviceConfig.getFloat(
+                DeviceConfig.NAMESPACE_DISPLAY_MANAGER,
+                DisplayManager.DeviceConfig.KEY_PEAK_REFRESH_RATE_DEFAULT, -1f);
+        return deviceConfigDefault == -1f ? configuredDefault : deviceConfigDefault;
     }
 
 }
