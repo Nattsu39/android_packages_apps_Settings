@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="charging_bypass_title">旁路充电（充电分离）</string>
+    <string name="charging_bypass_active">电池充电已暂停，外部供电保持启用。熄屏五分钟后自动关闭。</string>
+    <string name="charging_bypass_off">临时暂停电池充电。需连接有线充电器且电量不低于 20%，重启后不会自动开启。</string>
+    <string name="charging_bypass_unplugged">连接有线充电器后可使用旁路充电。</string>
+    <string name="charging_bypass_low_battery">电量需不低于 20%。</string>
+    <string name="charging_bypass_screen_off">已在熄屏五分钟后结束本次旁路充电。</string>
+    <string name="charging_bypass_error">无法确认充电状态，点按可重试关闭旁路充电。</string>
+    <string name="charging_bypass_request_failed">无法确认充电请求是否成功，请查看当前状态后重试。</string>
+</resources>

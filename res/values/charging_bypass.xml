@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="charging_bypass_title">Bypass charging</string>
+    <string name="charging_bypass_active">Battery charging is paused while external power remains enabled. Turns off after five minutes with the screen off.</string>
+    <string name="charging_bypass_off">Temporarily pause battery charging. Requires wired power and at least 20% battery. Does not resume after a restart.</string>
+    <string name="charging_bypass_unplugged">Connect a wired charger to use bypass charging.</string>
+    <string name="charging_bypass_low_battery">Battery level must be at least 20%.</string>
+    <string name="charging_bypass_screen_off">The session ended after five minutes with the screen off.</string>
+    <string name="charging_bypass_error">Charging state could not be confirmed. Tap to retry turning bypass off.</string>
+    <string name="charging_bypass_request_failed">The charging request could not be confirmed. Check the current state and try again.</string>
+</resources>
