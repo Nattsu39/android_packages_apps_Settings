@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="low_light_flicker_optimization_title">暗光屏闪优化</string>
+    <string name="low_light_flicker_optimization_summary">屏幕完全关闭后生效。低亮度下可能出现色偏。</string>
+</resources>

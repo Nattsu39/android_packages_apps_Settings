@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="low_light_flicker_optimization_title">Low-light flicker optimization</string>
+    <string name="low_light_flicker_optimization_summary">Changes take effect after the screen turns fully off. Colors may shift at low brightness.</string>
+</resources>
