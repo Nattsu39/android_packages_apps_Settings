@@ -50,6 +50,13 @@
             settings:keywords="@string/keywords_display_hdr_brightness"
             settings:controller="com.android.settings.display.HdrBrightnessPreferenceController"/>
 
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="low_light_flicker_optimization"
+            android:persistent="false"
+            android:title="@string/low_light_flicker_optimization_title"
+            android:summary="@string/low_light_flicker_optimization_summary"
+            settings:controller="com.android.settings.display.LowLightFlickerPreferenceController"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
