@@ -20,6 +20,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
@@ -41,6 +42,20 @@ public final class PeriodicJobManager {
     private final AlarmManager mAlarmManager;
 
     @VisibleForTesting static long sBroadcastDelayFromBoot = Duration.ofMinutes(40).toMillis();
+
+    /**
+     * NX809J: stride, in hours, between battery-usage refreshes. 1 = stock (default).
+     *
+     * <p>AOSP schedules this job with {@code setExactAndAllowWhileIdle(RTC_WAKEUP)} on every sharp
+     * hour. "AllowWhileIdle" means Doze is not permitted to defer it, so it is the most frequent
+     * thing that can wake an idle, offline phone — and no {@code device_idle_constants} tuning can
+     * touch it, which is why stretching the Doze windows appears to do nothing. Left alone it is
+     * ~9 guaranteed wakeups across a night on the desk, purely to refresh a battery chart.
+     *
+     * <p>Values: {@code 1} = stock hourly, {@code N} = every N hours, {@code 0} = never schedule.
+     * At 0 the battery-usage history simply stops accumulating; nothing else in Settings breaks.
+     */
+    private static final String PROP_JOB_STRIDE_HOURS = "persist.sys.rm.batteryjob_hours";
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     void reset() {
@@ -73,9 +88,25 @@ public final class PeriodicJobManager {
         // Cancels the previous alert job and schedules the next one.
         final PendingIntent pendingIntent = getPendingIntent();
         cancelJob(pendingIntent);
+
+        final int strideHours = SystemProperties.getInt(PROP_JOB_STRIDE_HOURS, 1);
+        if (strideHours <= 0) {
+            // Deliberately do not reschedule. The alarm above is already cancelled, so the chain
+            // stops here until the next boot or until the user opens the battery-usage screen.
+            BatteryUsageLogUtils.writeLog(
+                    mContext, Action.SCHEDULE_JOB, "job disabled by " + PROP_JOB_STRIDE_HOURS);
+            Log.d(TAG, "periodic job disabled by " + PROP_JOB_STRIDE_HOURS);
+            return;
+        }
+
         // Uses the timestamp of next full hour in local timezone.
         long currentTimeMillis = System.currentTimeMillis();
-        final long triggerAtMillis = getTriggerAtMillis(currentTimeMillis, fromBoot);
+        long triggerAtMillis = getTriggerAtMillis(currentTimeMillis, fromBoot);
+        // Step whole sharp hours rather than adding milliseconds, so the trigger stays hour-aligned
+        // across a DST transition.
+        for (int i = 1; i < strideHours; i++) {
+            triggerAtMillis = TimestampUtils.getNextHourTimestamp(triggerAtMillis);
+        }
         mAlarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
 

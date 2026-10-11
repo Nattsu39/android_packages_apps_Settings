@@ -106,18 +106,18 @@ class MagnifyKeyboardPreferenceController(context: Context, prefKey: String) :
         if (preference?.key == preferenceKey) {
             @MagnificationCapabilities.MagnificationMode
             val mode = MagnificationCapabilities.getCapabilities(mContext)
-            preference.isEnabled =
+            preference?.isEnabled =
                 mode == MagnificationCapabilities.MagnificationMode.FULLSCREEN ||
                     mode == MagnificationCapabilities.MagnificationMode.ALL
 
             @StringRes
             val resId =
-                if (preference.isEnabled) {
+                if (preference?.isEnabled == true) {
                     R.string.accessibility_screen_magnification_nav_ime_summary
                 } else {
                     R.string.accessibility_screen_magnification_nav_ime_unavailable_summary
                 }
-            preference.setSummary(mContext.getString(resId))
+            preference?.setSummary(mContext.getString(resId))
         }
     }
 }

@@ -155,7 +155,7 @@ class CatalystStateProviderExecutor(
                                 localized = metadata.getPreferenceTitle(context).toString(),
                             ),
                         jsonValue = it,
-                        hintText = config?.hintText(englishContext, metadata),
+                        hintText = config?.hintText?.invoke(englishContext, metadata),
                     )
                 )
             }
