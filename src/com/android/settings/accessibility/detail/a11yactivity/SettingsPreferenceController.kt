@@ -38,7 +38,7 @@ class SettingsPreferenceController(context: Context, prefKey: String) :
             } == true
 
         if (canResolveIntent) {
-            setIntent(settingsIntent!!)
+            setIntent(settingsIntent)
         }
     }
 

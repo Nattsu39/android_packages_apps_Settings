@@ -143,7 +143,7 @@ class CatalystStateMetadataProviderExecutor(
                     writable = metadataProto.readWritePermit == ReadWritePermit.ALLOW,
                     // TODO: properly expose possible values
                     possibleValues = metadataProto.valueDescriptor.toString(),
-                    hintText = config?.hintText?.invoke(englishContext, metadata),
+                    hintText = config?.hintText(englishContext, metadata),
                 )
             )
         }

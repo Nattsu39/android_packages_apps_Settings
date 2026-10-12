@@ -80,7 +80,7 @@ class OneFingerPanningPreferenceController(context: Context, prefKey: String) :
         super.updateState(preference)
         if (preference?.key == preferenceKey) {
             @MagnificationMode val mode = MagnificationCapabilities.getCapabilities(mContext)
-            preference?.isEnabled = mode == FULLSCREEN || mode == ALL
+            preference.isEnabled = mode == FULLSCREEN || mode == ALL
             refreshSummary(preference)
         }
     }

@@ -428,7 +428,7 @@ open class SelectedDisplayPreferenceFragment(
                         writePreferenceClickMetric(preference)
                         val displayId = viewModel.uiState.value?.selectedDisplayId ?: return false
                         val uniqueDisplayId =
-                            viewModel.uiState.value?.enabledDisplays?.get(displayId)?.uniqueId
+                            viewModel.uiState.value?.enabledDisplays[displayId]?.uniqueId
                                 ?: return false
                         val connectionPreference = Integer.parseInt(newValue as String)
                         viewModel.injector.updateDisplayConnectionPreference(

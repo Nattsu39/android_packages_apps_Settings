@@ -110,8 +110,8 @@ class SupervisionMessengerClient(context: Context) :
      * @return A map where the keys are the requested keys, and the values are the corresponding
      *   list of supported apps.
      */
-    override suspend fun getSupportedApps(keys: List<String>): Map<String, List<SupportedApp>> {
-        return try {
+    override suspend fun getSupportedApps(keys: List<String>): Map<String, List<SupportedApp>> =
+        try {
             val targetPackageName = packageName ?: return mapOf()
 
             invoke(targetPackageName, SupportedAppsApi(), SupportedAppsRequest(keys = keys)).await()
@@ -119,7 +119,6 @@ class SupervisionMessengerClient(context: Context) :
             Log.e(SupervisionLog.TAG, "Error fetching supported apps from supervision app", e)
             mapOf()
         }
-    }
 
     /**
      * Generates a deterministic cache key from a list of preference keys. The keys are sorted to
